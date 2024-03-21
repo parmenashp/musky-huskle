@@ -1,20 +1,38 @@
 import GearSvg from "./assets/gear.svg";
 import FireSvg from "./assets/fire.svg";
+import Heart from "./assets/heart.svg";
 import QuestionSvg from "./assets/question-mark.svg";
+import PolygonSvg from "./assets/polygon.svg";
+import PawSvg from "./assets/paw.png";
 import styled from "styled-components";
+import TextStroke from "./components/TextStroke";
 
-const PStroke = styled.p<{ $textColor?: string }>`
-  -webkit-text-stroke: 6px #000000;
-  paint-order: stroke fill;
-  color: ${(props) => props.$textColor};
+const NameInput = styled.input`
+  border: 0.25rem solid #000000;
+  border-radius: 0.25rem;
+  padding: 1.375rem;
+  height: 3.25rem;
+  width: 20rem;
+  background-color: #181818;
+
+  &::placeholder {
+    opacity: 1; /* Firefox */
+    color: #6b6b6b;
+    font-size: 1.125rem;
+  }
 `;
 
 function App() {
   return (
     <>
       <div className="flex max-w-4xl justify-center pt-12 gap-7 flex-col text-center items-center">
-        <h1 className="text-7xl">Musky Huskle</h1>
-        <h2 className="text-3xl">Jogo diário do Musky</h2>
+        <TextStroke strokeSize="10px" className="text-7xl">
+          Musky Huskle
+        </TextStroke>
+        <TextStroke strokeSize="10px" className="text-3xl">
+          Jogo diário do Musky
+        </TextStroke>
+
         <div className="flex gap-8">
           <button>
             <img src={GearSvg} alt="Settings" />
@@ -26,9 +44,28 @@ function App() {
             <img src={QuestionSvg} alt="Help" />
           </button>
         </div>
-        <PStroke className="text-xl" $textColor="#FFF">
-          <span className="text-[#EBD357]">18</span> pessoas já descobriram hoje
-        </PStroke>
+
+        <div className="text-xl">
+          <TextStroke strokeSize="6px" className="text-[#EBD357]">
+            18
+          </TextStroke>
+          &nbsp;
+          <TextStroke strokeSize="6px">pessoas já descobriram hoje</TextStroke>
+        </div>
+
+        <div className="flex">
+          {Array.from({ length: 7 }).map((_, index) => (
+            <img key={index} src={Heart} alt="Heart" />
+          ))}
+        </div>
+
+        <div className="flex items-center">
+          <NameInput id="name" type="text" placeholder="Digite o nome" />
+          <button className="flex items-center justify-center">
+            <img src={PawSvg} className="h-12 w-12 absolute" />
+            <img src={PolygonSvg} className="w-24 h-24" />
+          </button>
+        </div>
       </div>
     </>
   );

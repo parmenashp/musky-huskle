@@ -1,6 +1,13 @@
 import GearSvg from "./assets/gear.svg";
 import FireSvg from "./assets/fire.svg";
 import QuestionSvg from "./assets/question-mark.svg";
+import styled from "styled-components";
+
+const PStroke = styled.p<{ $textColor?: string }>`
+  -webkit-text-stroke: 6px #000000;
+  paint-order: stroke fill;
+  color: ${(props) => props.$textColor};
+`;
 
 function App() {
   return (
@@ -19,6 +26,9 @@ function App() {
             <img src={QuestionSvg} alt="Help" />
           </button>
         </div>
+        <PStroke className="text-xl" $textColor="#FFF">
+          <span className="text-[#EBD357]">18</span> pessoas já descobriram hoje
+        </PStroke>
       </div>
     </>
   );

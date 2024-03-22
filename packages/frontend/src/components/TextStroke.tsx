@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 const SpanStrike = styled.span<{ $textColor?: string; $strokeSize?: string }>`
+  white-space: nowrap;
+
   &:before {
     content: attr(data-text);
     -webkit-text-stroke: ${(props) => props.$strokeSize || "2px"} #000000;
@@ -10,7 +12,7 @@ const SpanStrike = styled.span<{ $textColor?: string; $strokeSize?: string }>`
 `;
 
 function TextStroke(props: {
-  children: string;
+  children: React.ReactNode | React.ReactNode[];
   strokeSize?: string;
   className?: string;
 }) {

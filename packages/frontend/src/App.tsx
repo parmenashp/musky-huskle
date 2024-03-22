@@ -2,10 +2,10 @@ import GearSvg from "./assets/gear.svg";
 import FireSvg from "./assets/fire.svg";
 import Heart from "./assets/heart.svg";
 import QuestionSvg from "./assets/question-mark.svg";
-import PolygonSvg from "./assets/polygon.svg";
-import PawSvg from "./assets/paw.png";
-import styled from "styled-components";
+import PolygonButton from "./components/PolygonButton";
 import TextStroke from "./components/TextStroke";
+import styled from "styled-components";
+import GameBox from "./components/GameBox";
 
 const NameInput = styled.input`
   border: 0.25rem solid #000000;
@@ -61,10 +61,24 @@ function App() {
 
         <div className="flex items-center">
           <NameInput id="name" type="text" placeholder="Digite o nome" />
-          <button className="flex items-center justify-center">
-            <img src={PawSvg} className="h-12 w-12 absolute" />
-            <img src={PolygonSvg} className="w-24 h-24" />
-          </button>
+          <PolygonButton />
+        </div>
+        <div className="flex gap-1">
+          {/* <GameBox variant="right">Teste</GameBox> */}
+          <GameBox
+            variant="avatar"
+            avatar="https://cdn.discordapp.com/avatars/182575852406571008/70ef4f9d6efdafaf20c20ed90f4e45b3.png?size=128"
+          >
+            Teste
+          </GameBox>
+          <GameBox variant="partial">Teste</GameBox>
+          <GameBox variant="right">Teste</GameBox>
+          <GameBox variant="partial">Teste</GameBox>
+          <GameBox variant="wrong">Teste</GameBox>
+          <GameBox variant="right">Teste</GameBox>
+          <GameBox variant="wrong">Teste</GameBox>
+          <GameBox variant="partial">Teste</GameBox>
+          <GameBox variant="wrong">Teste</GameBox>
         </div>
       </div>
     </>

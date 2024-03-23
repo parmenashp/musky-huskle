@@ -4,10 +4,15 @@ import (
 	"log"
 	"net"
 
+	pb "github.com/DanielKenichi/musky-huskle-api/proto"
 	"google.golang.org/grpc"
 )
 
 const server_port = ":9621"
+
+type MembersServer struct {
+	pb.MembersServiceServer
+}
 
 func main() {
 
@@ -19,6 +24,8 @@ func main() {
 
 	gRPCServer := grpc.NewServer()
 
+	RegisterServiceServers(gRPCServer)
+
 	log.Printf("Server being started at %v", server_listener.Addr())
 
 	err = gRPCServer.Serve(server_listener)
@@ -26,4 +33,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to start the server %v", err)
 	}
+}
+
+func RegisterServiceServers(gRPCServer *grpc.Server) {
+	pb.RegisterMembersServiceServer(gRPCServer, &MembersServer{})
 }

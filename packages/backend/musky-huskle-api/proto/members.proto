@@ -1,0 +1,37 @@
+syntax="proto3";
+
+option go_package ="./proto";
+
+package members_service;
+
+service MembersService{
+    rpc GetMemberData(MembersRequest) returns (MembersResponse);
+}
+
+message Empty {}
+
+message MembersRequest{
+    repeated string members_name = 1;
+}
+
+message CategoryValue{
+    string value = 1;
+    bool status = 2; 
+}
+
+message MemberResponse{
+    CategoryValue genre_identity = 1;
+    CategoryValue age = 2;
+    CategoryValue fursona_species = 3;
+    CategoryValue color = 4;
+    CategoryValue occupation = 5;
+    CategoryValue sexuality = 6;
+    CategoryValue sign = 7;
+    CategoryValue member_since = 8;
+    string avatar_url = 9;
+    string name = 10;
+}
+
+message MembersResponse{
+    repeated MemberResponse members = 1;
+}

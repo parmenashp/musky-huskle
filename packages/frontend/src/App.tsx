@@ -5,7 +5,8 @@ import QuestionSvg from "./assets/question-mark.svg";
 import PolygonButton from "./components/PolygonButton";
 import TextStroke from "./components/TextStroke";
 import styled from "styled-components";
-import GameRow from "./components/GameRow";
+import GameRow, { GameMemberData } from "./components/GameRow";
+import { useState } from "react";
 
 const NameInput = styled.input`
   border: 0.25rem solid #000000;
@@ -23,6 +24,34 @@ const NameInput = styled.input`
 `;
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [gameData, setGameData] = useState<GameMemberData[]>([
+    {
+      avatar: {
+        name: "Mitsuaky",
+        avatarUrl:
+          "https://cdn.discordapp.com/avatars/182575852406571008/70ef4f9d6efdafaf20c20ed90f4e45b3.png?size=128",
+      },
+      gender: { value: "Homem", status: "right" },
+      age: { value: 20, status: "wrong" },
+      fursonaSpecies: { value: ["Cachorro"], status: "right" },
+      fursonaColor: { value: "Cinza", status: "wrong" },
+      workArea: { value: ["TI"], status: "wrong" },
+      sexuality: { value: "Bi", status: "right" },
+      zodiacSign: { value: "Touro", status: "wrong" },
+      memberSince: { value: "2019", status: "right" },
+    },
+  ]);
+
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    setSearchTerm("");
+    setGameData((state) => [state[0], ...state]);
+  };
+
   return (
     <>
       <div className="flex max-w-4xl justify-center pt-12 gap-7 flex-col text-center items-center">
@@ -46,7 +75,7 @@ function App() {
         </div>
 
         <div className="text-xl">
-          <TextStroke strokeSize="6px" className="text-[#EBD357]">
+          <TextStroke strokeSize="6px" className="text-accent">
             18
           </TextStroke>
           &nbsp;
@@ -60,34 +89,18 @@ function App() {
         </div>
 
         <div className="flex items-center">
-          <NameInput id="name" type="text" placeholder="Digite o nome" />
-          <PolygonButton />
+          <NameInput
+            id="name"
+            type="text"
+            placeholder="Digite o nome"
+            onChange={onSearchChange}
+            value={searchTerm}
+          />
+          <PolygonButton onClick={handleSearchSubmit} />
         </div>
-        <GameRow
-          memberData={{
-            name: "Mitsuaky",
-            avatarUrl:
-              "https://cdn.discordapp.com/avatars/182575852406571008/70ef4f9d6efdafaf20c20ed90f4e45b3.png?size=128",
-            age: 21,
-            gender: "Homem",
-            fursonaSpecies: ["Cachorro"],
-            fursonaColor: "Feio",
-            workArea: ["Bostola"],
-            sexuality: "Bottom",
-            zodiacSign: "Muito legal",
-            memberSince: "2002",
-          }}
-          apiData={{
-            age: "right",
-            gender: "right",
-            fursonaSpecies: "partial",
-            fursonaColor: "wrong",
-            workArea: "partial",
-            sexuality: "partial",
-            zodiacSign: "wrong",
-            memberSince: "wrong down",
-          }}
-        />
+        {gameData.map((data) => (
+          <GameRow memberData={data} />
+        ))}
       </div>
     </>
   );

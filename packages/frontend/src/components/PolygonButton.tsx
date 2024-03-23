@@ -13,14 +13,11 @@ const Button = styled.button`
     transition: background-size 0.01s;
   }
 `;
+type PolygonButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-function PolygonButton() {
-  const handleClick = () => {
-    console.log("Polygon button clicked");
-  };
-
+function PolygonButton({ ...rest }: PolygonButtonProps) {
   return (
-    <Button className="flex items-center justify-center" onClick={handleClick}>
+    <Button className="flex items-center justify-center" {...rest}>
       <img src={PolygonSvg} className="w-24 h-24 -z-10" />
     </Button>
   );

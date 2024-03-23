@@ -1,49 +1,36 @@
 import GameBox from "./GameBox";
+import { statuses } from "./GameBox";
 
-type statuses = "right" | "wrong" | "partial" | "wrong up" | "wrong down";
+export type CategoryValue<T> = {
+  value: T;
+  status: statuses;
+};
 
-type GameMemberData = {
+export type MemberAvatar = {
   name: string;
   avatarUrl: string;
-  gender: string;
-  age: number;
-  fursonaSpecies: [string];
-  fursonaColor: string;
-  workArea: [string];
-  sexuality: string;
-  zodiacSign: string;
-  memberSince: string;
 };
 
-type GameApiData = {
-  gender: statuses;
-  age: statuses;
-  fursonaSpecies: statuses;
-  fursonaColor: statuses;
-  workArea: statuses;
-  sexuality: statuses;
-  zodiacSign: statuses;
-  memberSince: statuses;
+export type GameMemberData = {
+  avatar: MemberAvatar;
+  gender: CategoryValue<string>;
+  age: CategoryValue<number>;
+  fursonaSpecies: CategoryValue<[string]>;
+  fursonaColor: CategoryValue<string>;
+  workArea: CategoryValue<[string]>;
+  sexuality: CategoryValue<string>;
+  zodiacSign: CategoryValue<string>;
+  memberSince: CategoryValue<string>;
 };
 
-function GameRow(props: { memberData: GameMemberData; apiData: GameApiData }) {
-  const { memberData, apiData } = props;
-
-  function renderText(value: string | number | [string]) {
-    if (Array.isArray(value)) {
-      return value.join(", ");
-    } else {
-      return value.toString();
-    }
-  }
+function GameRow(props: { memberData: GameMemberData }) {
+  const { avatar, ...restMemberData } = props.memberData;
 
   return (
     <div className="flex gap-1">
-      <GameBox avatarUrl={memberData.avatarUrl}>{memberData.name}</GameBox>
-      {Object.entries(apiData).map(([key, status]) => (
-        <GameBox key={key} status={status}>
-          {renderText(memberData[key as keyof GameMemberData])}
-        </GameBox>
+      <GameBox data={avatar} />
+      {Object.entries(restMemberData).map(([key, data]) => (
+        <GameBox key={key} data={data} />
       ))}
     </div>
   );

@@ -1,13 +1,17 @@
 import styled from "styled-components";
 import TextStrokeComp from "./TextStroke";
 import RedArrowSvg from "../assets/red-arrow.svg";
+import { MemberAvatar, CategoryValue } from "./GameRow";
 
-type statuses = "right" | "wrong" | "partial" | "wrong up" | "wrong down";
+export type statuses =
+  | "right"
+  | "wrong"
+  | "partial"
+  | "wrong up"
+  | "wrong down";
 
 type BoxProps = {
-  children?: string;
-  avatarUrl?: string;
-  status?: statuses;
+  data: CategoryValue<string | number | [string]> | MemberAvatar;
 };
 
 type BoxStyleProps = {
@@ -77,25 +81,36 @@ const Box = styled.div<BoxStyleProps>`
   }
 `;
 
-const GameBox: React.FC<BoxProps> = ({ status, avatarUrl, children }) => {
-  const isAvatar = avatarUrl !== undefined;
+function GameBox({ data }: BoxProps) {
+  const isAvatar = data.hasOwnProperty("avatarUrl");
 
-  function RenderText() {
-    if (isAvatar) {
-      return <HoverTextStroke>{children}</HoverTextStroke>;
+  function renderText(value: string | [string] | number) {
+    if (Array.isArray(value)) {
+      return value.join(", ");
     } else {
-      return <TextStroke strokeSize="3px">{children}</TextStroke>;
+      return value.toString();
     }
   }
 
-  return (
-    <Box
-      className={isAvatar ? "avatar" : status}
-      avatarUrl={isAvatar ? avatarUrl : undefined}
-    >
-      {RenderText()}
-    </Box>
-  );
-};
+  function renderBox() {
+    if (isAvatar) {
+      data = data as MemberAvatar;
+      return (
+        <Box className="avatar" avatarUrl={data.avatarUrl}>
+          <HoverTextStroke>{data.name}</HoverTextStroke>
+        </Box>
+      );
+    } else {
+      data = data as CategoryValue<string | number | [string]>;
+      return (
+        <Box className={data.status}>
+          <TextStroke strokeSize="4px">{renderText(data.value)}</TextStroke>
+        </Box>
+      );
+    }
+  }
+
+  return renderBox();
+}
 
 export default GameBox;

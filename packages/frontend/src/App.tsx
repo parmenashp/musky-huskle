@@ -5,7 +5,7 @@ import QuestionSvg from "./assets/question-mark.svg";
 import PolygonButton from "./components/PolygonButton";
 import TextStroke from "./components/TextStroke";
 import styled from "styled-components";
-import GameBox from "./components/GameBox";
+import GameRow from "./components/GameRow";
 
 const NameInput = styled.input`
   border: 0.25rem solid #000000;
@@ -63,23 +63,31 @@ function App() {
           <NameInput id="name" type="text" placeholder="Digite o nome" />
           <PolygonButton />
         </div>
-        <div className="flex gap-1">
-          {/* <GameBox variant="right">Teste</GameBox> */}
-          <GameBox
-            variant="avatar"
-            avatar="https://cdn.discordapp.com/avatars/182575852406571008/70ef4f9d6efdafaf20c20ed90f4e45b3.png?size=128"
-          >
-            Teste
-          </GameBox>
-          <GameBox variant="partial">Teste</GameBox>
-          <GameBox variant="right">Teste</GameBox>
-          <GameBox variant="partial">Teste</GameBox>
-          <GameBox variant="wrong">Teste</GameBox>
-          <GameBox variant="right">Teste</GameBox>
-          <GameBox variant="wrong">Teste</GameBox>
-          <GameBox variant="partial">Teste</GameBox>
-          <GameBox variant="wrong">Teste</GameBox>
-        </div>
+        <GameRow
+          memberData={{
+            name: "Mitsuaky",
+            avatarUrl:
+              "https://cdn.discordapp.com/avatars/182575852406571008/70ef4f9d6efdafaf20c20ed90f4e45b3.png?size=128",
+            age: 21,
+            gender: "Homem",
+            fursonaSpecies: ["Cachorro"],
+            fursonaColor: "Feio",
+            workArea: ["Bostola"],
+            sexuality: "Bottom",
+            zodiacSign: "Muito legal",
+            memberSince: "2002",
+          }}
+          apiData={{
+            age: "right",
+            gender: "right",
+            fursonaSpecies: "partial",
+            fursonaColor: "wrong",
+            workArea: "partial",
+            sexuality: "partial",
+            zodiacSign: "wrong",
+            memberSince: "wrong down",
+          }}
+        />
       </div>
     </>
   );

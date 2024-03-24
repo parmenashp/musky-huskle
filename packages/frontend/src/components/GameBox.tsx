@@ -1,21 +1,14 @@
 import styled from "styled-components";
 import TextStrokeComp from "./TextStroke";
 import RedArrowSvg from "../assets/red-arrow.svg";
-import { MemberAvatar, CategoryValue } from "./GameRow";
-
-export type statuses =
-  | "right"
-  | "wrong"
-  | "partial"
-  | "wrong up"
-  | "wrong down";
+import { MemberAvatar, CategoryValue } from "../types";
 
 type BoxProps = {
-  data: CategoryValue<string | number | [string]> | MemberAvatar;
+  data: CategoryValue<string | number | string[]> | MemberAvatar;
 };
 
 type BoxStyleProps = {
-  avatarUrl?: string;
+  $avatarurl?: string;
 };
 
 const TextStroke = styled(TextStrokeComp)``;
@@ -65,7 +58,7 @@ const Box = styled.div<BoxStyleProps>`
   }
 
   &.avatar {
-    background-image: url(${(props) => props.avatarUrl});
+    background-image: url(${(props) => props.$avatarurl});
     background-size: cover;
     background-repeat: no-repeat;
     ${HoverTextStroke} {
@@ -81,10 +74,13 @@ const Box = styled.div<BoxStyleProps>`
   }
 `;
 
-function GameBox({ data }: BoxProps) {
+function GameBox({
+  data,
+  ...rest
+}: BoxProps & React.HTMLAttributes<HTMLDivElement>) {
   const isAvatar = data.hasOwnProperty("avatarUrl");
 
-  function renderText(value: string | [string] | number) {
+  function renderText(value: string | string[] | number) {
     if (Array.isArray(value)) {
       return value.join(", ");
     } else {
@@ -96,14 +92,14 @@ function GameBox({ data }: BoxProps) {
     if (isAvatar) {
       data = data as MemberAvatar;
       return (
-        <Box className="avatar" avatarUrl={data.avatarUrl}>
+        <Box className="avatar" $avatarurl={data.avatarUrl} {...rest}>
           <HoverTextStroke>{data.name}</HoverTextStroke>
         </Box>
       );
     } else {
-      data = data as CategoryValue<string | number | [string]>;
+      data = data as CategoryValue<string | number | string[]>;
       return (
-        <Box className={data.status}>
+        <Box className={data.status} {...rest}>
           <TextStroke strokeSize="4px">{renderText(data.value)}</TextStroke>
         </Box>
       );

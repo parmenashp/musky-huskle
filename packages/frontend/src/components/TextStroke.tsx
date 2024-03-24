@@ -1,13 +1,17 @@
 import styled from "styled-components";
 
 const SpanStrike = styled.span<{ $textColor?: string; $strokeSize?: string }>`
-  white-space: nowrap;
-
-  &:before {
+  position: relative;
+  &::before {
     content: attr(data-text);
     -webkit-text-stroke: ${(props) => props.$strokeSize || "2px"} #000000;
     position: absolute;
+    align-self: center;
     z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 `;
 

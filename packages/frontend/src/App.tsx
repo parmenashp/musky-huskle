@@ -5,8 +5,9 @@ import QuestionSvg from "./assets/question-mark.svg";
 import PolygonButton from "./components/PolygonButton";
 import TextStroke from "./components/TextStroke";
 import styled from "styled-components";
-import GameRow, { GameMemberData } from "./components/GameRow";
 import { useState } from "react";
+import GameTable from "./components/GameTable";
+import { GameMemberData } from "./types";
 
 const NameInput = styled.input`
   border: 0.25rem solid #000000;
@@ -28,18 +29,51 @@ function App() {
   const [gameData, setGameData] = useState<GameMemberData[]>([
     {
       avatar: {
+        name: "Ichy",
+        avatarUrl:
+          "https://cdn.discordapp.com/avatars/141007689265315840/a_415f92b26e0199962f1f197b73668db7.gif?size=128",
+      },
+      gender: { value: "Homem", status: "right" },
+      age: { value: 29, status: "right" },
+      fursonaSpecies: { value: ["Cachorro"], status: "right" },
+      fursonaColor: { value: "Laranja", status: "right" },
+      workArea: { value: ["Sexo"], status: "right" },
+      sexuality: { value: "Gay", status: "right" },
+      zodiacSign: { value: "Capricórnio", status: "right" },
+      memberSince: { value: "2019", status: "right" },
+    },
+    {
+      avatar: {
         name: "Mitsuaky",
         avatarUrl:
           "https://cdn.discordapp.com/avatars/182575852406571008/70ef4f9d6efdafaf20c20ed90f4e45b3.png?size=128",
       },
       gender: { value: "Homem", status: "right" },
-      age: { value: 20, status: "wrong" },
+      age: { value: 21, status: "wrong" },
       fursonaSpecies: { value: ["Cachorro"], status: "right" },
       fursonaColor: { value: "Cinza", status: "wrong" },
-      workArea: { value: ["TI"], status: "wrong" },
-      sexuality: { value: "Bi", status: "right" },
+      workArea: { value: ["T.I.", "Sexo"], status: "partial" },
+      sexuality: { value: "Bi", status: "wrong" },
       zodiacSign: { value: "Touro", status: "wrong" },
       memberSince: { value: "2019", status: "right" },
+    },
+    {
+      avatar: {
+        name: "Dônovan Carmona",
+        avatarUrl:
+          "https://cdn.discordapp.com/avatars/187366610368069632/86b3d9717d508531d89cdaf8162717b4.png?size=128",
+      },
+      gender: { value: "Homem", status: "right" },
+      age: { value: 24, status: "wrong" },
+      fursonaSpecies: { value: ["Gato", "Demônio"], status: "wrong" },
+      fursonaColor: { value: "Cinza", status: "wrong" },
+      workArea: {
+        value: ["Design", "Edição"],
+        status: "wrong",
+      },
+      sexuality: { value: "Gay", status: "right" },
+      zodiacSign: { value: "Leão", status: "wrong" },
+      memberSince: { value: "2020", status: "wrong down" },
     },
   ]);
 
@@ -98,9 +132,7 @@ function App() {
           />
           <PolygonButton onClick={handleSearchSubmit} />
         </div>
-        {gameData.map((data) => (
-          <GameRow memberData={data} />
-        ))}
+        <GameTable tableData={gameData} />
       </div>
     </>
   );

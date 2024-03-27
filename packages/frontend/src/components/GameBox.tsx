@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import TextStrokeComp from "./TextStroke";
 import RedArrowSvg from "../assets/red-arrow.svg";
 import { MemberAvatar, CategoryValue } from "../types";
 
@@ -11,9 +10,7 @@ type BoxStyleProps = {
   $avatarurl?: string;
 };
 
-const TextStroke = styled(TextStrokeComp)``;
-
-const HoverTextStroke = styled(TextStroke)`
+const HoverText = styled.p`
   display: flex;
   width: 100%;
   height: 100%;
@@ -29,7 +26,6 @@ const Box = styled.div<BoxStyleProps>`
   align-items: center;
   border: 0.313rem solid #000000;
   border-radius: 0.313rem;
-  z-index: 10;
 
   &.right {
     background-color: #40ac2e;
@@ -47,7 +43,7 @@ const Box = styled.div<BoxStyleProps>`
       background-position: center;
       background-repeat: no-repeat;
       transform: rotate(180deg);
-      ${TextStroke} {
+      p {
         transform: rotate(-180deg);
       }
     }
@@ -61,12 +57,12 @@ const Box = styled.div<BoxStyleProps>`
     background-image: url(${(props) => props.$avatarurl});
     background-size: cover;
     background-repeat: no-repeat;
-    ${HoverTextStroke} {
+    ${HoverText} {
       opacity: 0;
       transition: backdrop-filter 0.1s;
     }
     &:hover {
-      ${HoverTextStroke} {
+      ${HoverText} {
         opacity: 1;
         backdrop-filter: brightness(50%);
       }
@@ -93,14 +89,14 @@ function GameBox({
       data = data as MemberAvatar;
       return (
         <Box className="avatar" $avatarurl={data.avatarUrl} {...rest}>
-          <HoverTextStroke>{data.name}</HoverTextStroke>
+          <HoverText>{data.name}</HoverText>
         </Box>
       );
     } else {
       data = data as CategoryValue<string | number | string[]>;
       return (
         <Box className={data.status} {...rest}>
-          <TextStroke strokeSize="4px">{renderText(data.value)}</TextStroke>
+          <p>{renderText(data.value)}</p>
         </Box>
       );
     }

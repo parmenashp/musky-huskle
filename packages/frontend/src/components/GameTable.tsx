@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import GameBox from "./GameBox";
 import { GameMemberData } from "../types";
-import TextStroke from "./TextStroke";
 
 const tableHeaders = [
   "Avatar",
@@ -26,10 +25,6 @@ const Table = styled.div`
   justify-items: center;
 `;
 
-const HeaderText = styled.span`
-  padding-bottom: 0.25rem;
-`;
-
 function GameTable({ tableData }: GameTableProps) {
   function renderTableRow(memberData: GameMemberData) {
     const { avatar, ...restMemberData } = memberData;
@@ -43,9 +38,9 @@ function GameTable({ tableData }: GameTableProps) {
 
   function renderTableHeader() {
     return tableHeaders.map((header, index) => (
-      <TextStroke strokeSize="4px" key={index} className="pb-1">
+      <p key={index} className="pb-1">
         {header}
-      </TextStroke>
+      </p>
     ));
   }
 

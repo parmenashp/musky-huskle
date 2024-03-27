@@ -3,11 +3,11 @@ import FireSvg from "./assets/fire.svg";
 import Heart from "./assets/heart.svg";
 import QuestionSvg from "./assets/question-mark.svg";
 import PolygonButton from "./components/PolygonButton";
-import TextStroke from "./components/TextStroke";
 import styled from "styled-components";
 import { useState } from "react";
 import GameTable from "./components/GameTable";
 import { GameMemberData } from "./types";
+import GameResult from "./components/GameResult";
 
 const NameInput = styled.input`
   border: 0.25rem solid #000000;
@@ -31,7 +31,7 @@ function App() {
       avatar: {
         name: "Ichy",
         avatarUrl:
-          "https://cdn.discordapp.com/avatars/141007689265315840/a_415f92b26e0199962f1f197b73668db7.gif?size=128",
+          "https://cdn.discordapp.com/avatars/141007689265315840/a_415f92b26e0199962f1f197b73668db7.png?size=128",
       },
       gender: { value: "Homem", status: "right" },
       age: { value: 29, status: "right" },
@@ -89,12 +89,8 @@ function App() {
   return (
     <>
       <div className="flex max-w-4xl justify-center pt-12 gap-7 flex-col text-center items-center">
-        <TextStroke strokeSize="10px" className="text-7xl">
-          Musky Huskle
-        </TextStroke>
-        <TextStroke strokeSize="10px" className="text-3xl">
-          Jogo diário do Musky
-        </TextStroke>
+        <p className="text-7xl">Musky Huskle</p>
+        <p className="text-3xl">Jogo diário do Musky</p>
 
         <div className="flex gap-8">
           <button>
@@ -108,13 +104,11 @@ function App() {
           </button>
         </div>
 
-        <div className="text-xl">
-          <TextStroke strokeSize="6px" className="text-accent">
-            18
-          </TextStroke>
+        <p className="text-xl">
+          <span className="text-accent">18</span>
           &nbsp;
-          <TextStroke strokeSize="6px">pessoas já descobriram hoje</TextStroke>
-        </div>
+          <span>pessoas já descobriram hoje</span>
+        </p>
 
         <div className="flex">
           {Array.from({ length: 7 }).map((_, index) => (
@@ -133,6 +127,7 @@ function App() {
           <PolygonButton onClick={handleSearchSubmit} />
         </div>
         <GameTable tableData={gameData} />
+        <GameResult />
       </div>
     </>
   );

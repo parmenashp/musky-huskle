@@ -1,0 +1,50 @@
+syntax="proto3";
+
+import "buf/validate/validate.proto";
+package members_service;
+
+service MembersService{
+    rpc GetMembers(GetMembersRequest) returns (MembersResponse);
+    rpc CreateMember(Member) returns (Empty);
+}
+
+message Empty {}
+
+message GetMembersRequest{
+    repeated string members_name = 1;
+}
+
+message CategoryValue{
+    string value = 1;
+    bool status = 2; 
+}
+
+message Member {
+    string genre_identity = 1;
+    uint32 age = 2 [(buf.validate.field).uint32 = {gte: 0, lte: 120}];
+    string fursona_species = 3;
+    string color = 4;
+    string occupation = 5;
+    string sexuality = 6;
+    string sign = 7;
+    string member_since = 8;
+    string avatar_url = 9;
+    string name = 10;
+}
+
+message MemberResponse{
+    CategoryValue genre_identity = 1;
+    CategoryValue age = 2;
+    CategoryValue fursona_species = 3;
+    CategoryValue color = 4;
+    CategoryValue occupation = 5;
+    CategoryValue sexuality = 6;
+    CategoryValue sign = 7;
+    CategoryValue member_since = 8;
+    string avatar_url = 9;
+    string name = 10;
+}
+
+message MembersResponse{
+    repeated MembersResponse members = 1;
+}

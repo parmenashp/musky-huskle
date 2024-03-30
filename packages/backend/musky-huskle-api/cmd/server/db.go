@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/DanielKenichi/musky-huskle-api/internal/types"
+	"github.com/DanielKenichi/musky-huskle-api/internal/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -44,5 +44,5 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 }
 
 func CreateTables(db *gorm.DB) {
-	db.Migrator().CreateTable(&types.Member{})
+	db.Migrator().CreateTable(&models.Member{})
 }

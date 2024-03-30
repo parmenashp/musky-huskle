@@ -19,14 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MembersService_GetMemberData_FullMethodName = "/members_service.MembersService/GetMemberData"
+	MembersService_GetMembers_FullMethodName   = "/members_service.MembersService/GetMembers"
+	MembersService_CreateMember_FullMethodName = "/members_service.MembersService/CreateMember"
 )
 
 // MembersServiceClient is the client API for MembersService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MembersServiceClient interface {
-	GetMemberData(ctx context.Context, in *MembersRequest, opts ...grpc.CallOption) (*MembersResponse, error)
+	GetMembers(ctx context.Context, in *GetMembersRequest, opts ...grpc.CallOption) (*MembersResponse, error)
+	CreateMember(ctx context.Context, in *Member, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type membersServiceClient struct {
@@ -37,9 +39,18 @@ func NewMembersServiceClient(cc grpc.ClientConnInterface) MembersServiceClient {
 	return &membersServiceClient{cc}
 }
 
-func (c *membersServiceClient) GetMemberData(ctx context.Context, in *MembersRequest, opts ...grpc.CallOption) (*MembersResponse, error) {
+func (c *membersServiceClient) GetMembers(ctx context.Context, in *GetMembersRequest, opts ...grpc.CallOption) (*MembersResponse, error) {
 	out := new(MembersResponse)
-	err := c.cc.Invoke(ctx, MembersService_GetMemberData_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, MembersService_GetMembers_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *membersServiceClient) CreateMember(ctx context.Context, in *Member, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, MembersService_CreateMember_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +61,8 @@ func (c *membersServiceClient) GetMemberData(ctx context.Context, in *MembersReq
 // All implementations must embed UnimplementedMembersServiceServer
 // for forward compatibility
 type MembersServiceServer interface {
-	GetMemberData(context.Context, *MembersRequest) (*MembersResponse, error)
+	GetMembers(context.Context, *GetMembersRequest) (*MembersResponse, error)
+	CreateMember(context.Context, *Member) (*Empty, error)
 	mustEmbedUnimplementedMembersServiceServer()
 }
 
@@ -58,8 +70,11 @@ type MembersServiceServer interface {
 type UnimplementedMembersServiceServer struct {
 }
 
-func (UnimplementedMembersServiceServer) GetMemberData(context.Context, *MembersRequest) (*MembersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMemberData not implemented")
+func (UnimplementedMembersServiceServer) GetMembers(context.Context, *GetMembersRequest) (*MembersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMembers not implemented")
+}
+func (UnimplementedMembersServiceServer) CreateMember(context.Context, *Member) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateMember not implemented")
 }
 func (UnimplementedMembersServiceServer) mustEmbedUnimplementedMembersServiceServer() {}
 
@@ -74,20 +89,38 @@ func RegisterMembersServiceServer(s grpc.ServiceRegistrar, srv MembersServiceSer
 	s.RegisterService(&MembersService_ServiceDesc, srv)
 }
 
-func _MembersService_GetMemberData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MembersRequest)
+func _MembersService_GetMembers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMembersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MembersServiceServer).GetMemberData(ctx, in)
+		return srv.(MembersServiceServer).GetMembers(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MembersService_GetMemberData_FullMethodName,
+		FullMethod: MembersService_GetMembers_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MembersServiceServer).GetMemberData(ctx, req.(*MembersRequest))
+		return srv.(MembersServiceServer).GetMembers(ctx, req.(*GetMembersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MembersService_CreateMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Member)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MembersServiceServer).CreateMember(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MembersService_CreateMember_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MembersServiceServer).CreateMember(ctx, req.(*Member))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,8 +133,12 @@ var MembersService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MembersServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetMemberData",
-			Handler:    _MembersService_GetMemberData_Handler,
+			MethodName: "GetMembers",
+			Handler:    _MembersService_GetMembers_Handler,
+		},
+		{
+			MethodName: "CreateMember",
+			Handler:    _MembersService_CreateMember_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

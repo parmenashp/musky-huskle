@@ -7,16 +7,16 @@ import (
 	"net"
 
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
+	members_server "github.com/DanielKenichi/musky-huskle-api/internal/server"
+	members_service "github.com/DanielKenichi/musky-huskle-api/internal/services"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+	"gorm.io/gorm"
 )
 
 var (
 	server_port = flag.Int("port", 9621, "Server Port")
 )
-
-type MembersServer struct {
-	pb.MembersServiceServer
-}
 
 func init() {
 	flag.Parse()
@@ -42,9 +42,11 @@ func main() {
 
 	gRPCServer := grpc.NewServer()
 
-	RegisterServiceServers(gRPCServer)
+	RegisterServiceServers(gRPCServer, gormDb)
 
 	log.Printf("Server being started at %v", server_listener.Addr())
+
+	reflection.Register(gRPCServer)
 
 	err = gRPCServer.Serve(server_listener)
 
@@ -53,6 +55,9 @@ func main() {
 	}
 }
 
-func RegisterServiceServers(gRPCServer *grpc.Server) {
-	pb.RegisterMembersServiceServer(gRPCServer, &MembersServer{})
+func RegisterServiceServers(gRPCServer *grpc.Server, gormDb *gorm.DB) {
+	membersService := members_service.New(gormDb)
+	membersServer := members_server.New(*membersService)
+
+	pb.RegisterMembersServiceServer(gRPCServer, membersServer)
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"net"
 
@@ -8,15 +10,31 @@ import (
 	"google.golang.org/grpc"
 )
 
-const server_port = ":9621"
+var (
+	server_port = flag.Int("port", 9621, "Server Port")
+)
 
 type MembersServer struct {
 	pb.MembersServiceServer
 }
 
+func init() {
+	flag.Parse()
+}
+
 func main() {
 
-	server_listener, err := net.Listen("tcp", server_port)
+	gormDb, err := ConnectToSQLiteDatabase()
+
+	db, _ := gormDb.DB()
+
+	defer db.Close()
+
+	if err != nil {
+		log.Fatalf("Could not connect to database: %v", err)
+	}
+
+	server_listener, err := net.Listen("tcp", fmt.Sprintf(":%d", *server_port))
 
 	if err != nil {
 		log.Fatalf("Failed to start the server: %v", err)

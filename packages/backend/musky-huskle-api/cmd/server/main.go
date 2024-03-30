@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/DanielKenichi/musky-huskle-api/proto"
+	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
 	"google.golang.org/grpc"
 )
 

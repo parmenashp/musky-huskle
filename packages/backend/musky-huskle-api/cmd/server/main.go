@@ -32,17 +32,24 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("Could not connect to database: %v", err)
+		return
 	}
 
 	server_listener, err := net.Listen("tcp", fmt.Sprintf(":%d", *server_port))
 
 	if err != nil {
 		log.Fatalf("Failed to start the server: %v", err)
+		return
 	}
 
 	gRPCServer := grpc.NewServer()
 
-	RegisterServiceServers(gRPCServer, gormDb)
+	err = RegisterServiceServers(gRPCServer, gormDb)
+
+	if err != nil {
+		log.Fatalf("Failed to register servers: %v", err)
+		return
+	}
 
 	log.Printf("Server being started at %v", server_listener.Addr())
 
@@ -52,12 +59,20 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("Failed to start the server %v", err)
+		return
 	}
 }
 
-func RegisterServiceServers(gRPCServer *grpc.Server, gormDb *gorm.DB) {
+func RegisterServiceServers(gRPCServer *grpc.Server, gormDb *gorm.DB) error {
 	membersService := members_service.New(gormDb)
-	membersServer := members_server.New(*membersService)
+	membersServer, err := members_server.New(membersService)
+
+	if err != nil {
+		log.Fatal("Failed to register MemberService Server")
+		return err
+	}
 
 	pb.RegisterMembersServiceServer(gRPCServer, membersServer)
+
+	return nil
 }

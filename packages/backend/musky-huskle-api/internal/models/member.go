@@ -13,7 +13,7 @@ type Member struct {
 	Sign           string
 	MemberSince    string
 	AvatarUrl      string
-	Name           string
+	Name           string `gorm:"unique"`
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 }

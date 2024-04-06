@@ -6,6 +6,8 @@ package members_service;
 service MembersService{
     rpc GetMembers(GetMembersRequest) returns (MembersResponse);
     rpc CreateMember(Member) returns (Empty);
+    rpc UpdateMember(Member) returns (Empty);
+    rpc DeleteMember(Member) returns (Empty);
 }
 
 message Empty {}
@@ -46,5 +48,5 @@ message MemberResponse{
 }
 
 message MembersResponse{
-    repeated MembersResponse members = 1;
+    repeated MemberResponse members = 1;
 }

@@ -1,7 +1,6 @@
 package members
 
 import (
-	"context"
 	"log"
 
 	"github.com/DanielKenichi/musky-huskle-api/internal/models"
@@ -16,7 +15,7 @@ func New(db *gorm.DB) *MembersService {
 	return &MembersService{db: db}
 }
 
-func (s *MembersService) CreateMember(ctx context.Context, member *models.Member) error {
+func (s *MembersService) CreateMember(member *models.Member) error {
 
 	result := s.db.Create(&member)
 
@@ -27,4 +26,58 @@ func (s *MembersService) CreateMember(ctx context.Context, member *models.Member
 	}
 
 	return nil
+}
+
+func (s *MembersService) UpdateMember(updatedMember *models.Member) error {
+
+	var member models.Member
+
+	result := s.db.Where("Name = ? ", member.Name).Find(&member)
+
+	if result.Error != nil {
+		log.Printf("Failed to retrieve member %s to update", updatedMember.Name)
+
+		return result.Error
+	}
+
+	updatedMember.ID = member.ID
+
+	result = s.db.Save(&updatedMember)
+
+	if result.Error != nil {
+		log.Printf("Failed updating member %s", updatedMember.Name)
+
+		return result.Error
+	}
+
+	return nil
+}
+
+func (s *MembersService) DeleteMember(memberToDelete *models.Member) error {
+
+	var member models.Member
+
+	result := s.db.Where("Name = ? ", memberToDelete.Name).Delete(&member)
+
+	if result.Error != nil {
+		log.Printf("Error trying to delete member %s", memberToDelete.Name)
+
+		return result.Error
+	}
+
+	return nil
+}
+
+func (s *MembersService) GetMembers(membersName []string) ([]models.Member, error) {
+	var members []models.Member
+
+	result := s.db.Where("Name IN ?", membersName).Find(&members)
+
+	if result.Error != nil {
+		log.Printf("Failed to retrieve members")
+
+		return nil, result.Error
+	}
+
+	return members, nil
 }

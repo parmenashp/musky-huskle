@@ -28,6 +28,46 @@ func (s *MembersService) CreateMember(member *models.Member) error {
 	return nil
 }
 
+func (s *MembersService) UpdateMember(updatedMember *models.Member) error {
+
+	var member models.Member
+
+	result := s.db.Where("Name = ? ", member.Name).Find(&member)
+
+	if result.Error != nil {
+		log.Printf("Failed to retrieve member %s to update", updatedMember.Name)
+
+		return result.Error
+	}
+
+	updatedMember.ID = member.ID
+
+	result = s.db.Save(&updatedMember)
+
+	if result.Error != nil {
+		log.Printf("Failed updating member %s", updatedMember.Name)
+
+		return result.Error
+	}
+
+	return nil
+}
+
+func (s *MembersService) DeleteMember(memberToDelete *models.Member) error {
+
+	var member models.Member
+
+	result := s.db.Where("Name = ? ", memberToDelete.Name).Delete(&member)
+
+	if result.Error != nil {
+		log.Printf("Error trying to delete member %s", memberToDelete.Name)
+
+		return result.Error
+	}
+
+	return nil
+}
+
 func (s *MembersService) GetMembers(membersName []string) ([]models.Member, error) {
 	var members []models.Member
 

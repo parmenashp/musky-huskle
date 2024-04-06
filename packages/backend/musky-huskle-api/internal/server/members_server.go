@@ -10,10 +10,13 @@ import (
 	"github.com/bufbuild/protovalidate-go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"gorm.io/gorm"
 )
 
 type MembersService interface {
 	CreateMember(member *models.Member) error
+	UpdateMember(member *models.Member) error
+	DeleteMember(member *models.Member) error
 	GetMembers(membersName []string) ([]models.Member, error)
 }
 
@@ -29,7 +32,7 @@ func New(membersService MembersService) (*MembersServer, error) {
 	if err != nil {
 		log.Fatalf("Error on protovalidate %v", err)
 
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &MembersServer{membersService: membersService, validator: validator}, nil
@@ -43,23 +46,48 @@ func (s *MembersServer) CreateMember(ctx context.Context, req *pb.Member) (*pb.E
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
 
-	member := &models.Member{
-		Name:           req.Name,
-		GenreIdentity:  req.GenreIdentity,
-		Age:            uint8(req.Age),
-		FursonaSpecies: req.FursonaSpecies,
-		Color:          req.Color,
-		Occupation:     req.Occupation,
-		Sexuality:      req.Sexuality,
-		Sign:           req.Sign,
-		MemberSince:    req.MemberSince,
-		AvatarUrl:      req.AvatarUrl,
-	}
+	member := MapMember(req)
 
 	err = s.membersService.CreateMember(member)
 
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, DbError(err)
+	}
+
+	return &pb.Empty{}, nil
+}
+
+func (s *MembersServer) UpdateMember(ctx context.Context, req *pb.Member) (*pb.Empty, error) {
+	err := s.validator.Validate(req)
+
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, err.Error())
+	}
+
+	member := MapMember(req)
+
+	err = s.membersService.UpdateMember(member)
+
+	if err != nil {
+		return nil, DbError(err)
+	}
+
+	return &pb.Empty{}, nil
+}
+
+func (s *MembersServer) DeleteMember(ctx context.Context, req *pb.Member) (*pb.Empty, error) {
+	err := s.validator.Validate(req)
+
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, err.Error())
+	}
+
+	member := MapMember(req)
+
+	err = s.membersService.DeleteMember(member)
+
+	if err != nil {
+		return nil, DbError(err)
 	}
 
 	return &pb.Empty{}, nil
@@ -75,7 +103,7 @@ func (s *MembersServer) GetMembers(ctx context.Context, req *pb.GetMembersReques
 	members, err := s.membersService.GetMembers(req.MembersName)
 
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, DbError(err)
 	}
 
 	var response = &pb.MembersResponse{
@@ -83,18 +111,7 @@ func (s *MembersServer) GetMembers(ctx context.Context, req *pb.GetMembersReques
 	}
 	for _, member := range members {
 
-		memberResponse := &pb.MemberResponse{
-			GenreIdentity:  GetCategoryValue(member.GenreIdentity),
-			Age:            GetCategoryValue(strconv.Itoa(int(member.Age))),
-			FursonaSpecies: GetCategoryValue(member.FursonaSpecies),
-			Color:          GetCategoryValue(member.Color),
-			Occupation:     GetCategoryValue(member.Occupation),
-			Sexuality:      GetCategoryValue(member.Sexuality),
-			Sign:           GetCategoryValue(member.Sign),
-			MemberSince:    GetCategoryValue(member.MemberSince),
-			AvatarUrl:      member.AvatarUrl,
-			Name:           member.Name,
-		}
+		memberResponse := MapMemberResponse(member)
 
 		response.Members = append(response.Members, memberResponse)
 	}
@@ -102,9 +119,50 @@ func (s *MembersServer) GetMembers(ctx context.Context, req *pb.GetMembersReques
 	return response, nil
 }
 
-func GetCategoryValue(value string) *pb.CategoryValue {
+func MapCategoryValue(value string) *pb.CategoryValue {
 	return &pb.CategoryValue{
 		Value:  value,
 		Status: false,
+	}
+}
+
+func MapMember(pbMember *pb.Member) *models.Member {
+	return &models.Member{
+		Name:           pbMember.Name,
+		GenreIdentity:  pbMember.GenreIdentity,
+		Age:            uint8(pbMember.Age),
+		FursonaSpecies: pbMember.FursonaSpecies,
+		Color:          pbMember.Color,
+		Occupation:     pbMember.Occupation,
+		Sexuality:      pbMember.Sexuality,
+		Sign:           pbMember.Sign,
+		MemberSince:    pbMember.MemberSince,
+		AvatarUrl:      pbMember.AvatarUrl,
+	}
+}
+
+func MapMemberResponse(member models.Member) *pb.MemberResponse {
+	return &pb.MemberResponse{
+		GenreIdentity:  MapCategoryValue(member.GenreIdentity),
+		Age:            MapCategoryValue(strconv.Itoa(int(member.Age))),
+		FursonaSpecies: MapCategoryValue(member.FursonaSpecies),
+		Color:          MapCategoryValue(member.Color),
+		Occupation:     MapCategoryValue(member.Occupation),
+		Sexuality:      MapCategoryValue(member.Sexuality),
+		Sign:           MapCategoryValue(member.Sign),
+		MemberSince:    MapCategoryValue(member.MemberSince),
+		AvatarUrl:      member.AvatarUrl,
+		Name:           member.Name,
+	}
+}
+
+func DbError(err error) error {
+	switch err {
+	case gorm.ErrRecordNotFound:
+		return status.Errorf(codes.NotFound, err.Error())
+	case gorm.ErrDuplicatedKey:
+		return status.Errorf(codes.AlreadyExists, err.Error())
+	default:
+		return status.Errorf(codes.Internal, err.Error())
 	}
 }

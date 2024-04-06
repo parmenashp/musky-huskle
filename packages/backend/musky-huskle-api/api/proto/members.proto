@@ -46,5 +46,5 @@ message MemberResponse{
 }
 
 message MembersResponse{
-    repeated MembersResponse members = 1;
+    repeated MemberResponse members = 1;
 }

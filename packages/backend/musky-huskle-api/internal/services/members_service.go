@@ -1,7 +1,6 @@
 package members
 
 import (
-	"context"
 	"log"
 
 	"github.com/DanielKenichi/musky-huskle-api/internal/models"
@@ -16,7 +15,7 @@ func New(db *gorm.DB) *MembersService {
 	return &MembersService{db: db}
 }
 
-func (s *MembersService) CreateMember(ctx context.Context, member *models.Member) error {
+func (s *MembersService) CreateMember(member *models.Member) error {
 
 	result := s.db.Create(&member)
 
@@ -27,4 +26,18 @@ func (s *MembersService) CreateMember(ctx context.Context, member *models.Member
 	}
 
 	return nil
+}
+
+func (s *MembersService) GetMembers(membersName []string) ([]models.Member, error) {
+	var members []models.Member
+
+	result := s.db.Where("Name IN ?", membersName).Find(&members)
+
+	if result.Error != nil {
+		log.Printf("Failed to retrieve members")
+
+		return nil, result.Error
+	}
+
+	return members, nil
 }

@@ -26,6 +26,18 @@ func (s *MembersService) CreateMember(member *models.Member) error {
 		return result.Error
 	}
 
+	shuffleBagEntry := models.ShuffleBag{
+		MemberID: member.ID,
+	}
+
+	result = s.db.Create(&shuffleBagEntry)
+
+	if result.Error != nil {
+		log.Printf("Failed inserting new member on shuffle bag")
+
+		return result.Error
+	}
+
 	return nil
 }
 

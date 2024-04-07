@@ -32,7 +32,7 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 		log.Fatal("Driver could not open sqlite database file")
 		return nil, err
 	}
-
+	//TODO: Implement database auto-repair
 	MigrateDb(db)
 
 	return db, nil

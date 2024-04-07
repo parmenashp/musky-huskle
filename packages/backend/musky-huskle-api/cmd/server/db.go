@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 	"os"
 
 	"github.com/DanielKenichi/musky-huskle-api/internal/models"
@@ -15,11 +14,11 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 	_, err := os.Stat("musky_huskle.db")
 
 	if errors.Is(err, os.ErrNotExist) {
-		log.Printf("Musky huskle DB not found. Creating new one.")
+		WarnLog.Printf("Musky huskle DB not found. Creating new one.")
 		file, err := os.Create("musky_huskle.db")
 
 		if err != nil {
-			log.Fatal("Could not create initial sqlite database", err)
+			ErrLog.Fatal("Could not create initial sqlite database", err)
 			return nil, err
 		}
 		file.Close()
@@ -29,20 +28,32 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 	db, err := gorm.Open(gormDial, &gorm.Config{})
 
 	if err != nil {
-		log.Fatal("Driver could not open sqlite database file")
+		ErrLog.Fatal("Driver could not open sqlite database file")
 		return nil, err
 	}
+	//TODO: Implement database auto-repair
+	err = MigrateDb(db)
 
-	MigrateDb(db)
+	if err != nil {
+		ErrLog.Fatalf("Could not Auto Migrate database: %v", err)
+
+		return nil, err
+	}
 
 	return db, nil
 }
 
-func MigrateDb(db *gorm.DB) {
-	db.Migrator().AutoMigrate(
+func MigrateDb(db *gorm.DB) error {
+	err := db.Migrator().AutoMigrate(
 		&models.Member{},
 		&models.MemberOfDay{},
 		&models.ShuffleBag{},
 		&models.WaitQueue{},
 	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -3,6 +3,7 @@ package members
 import (
 	"context"
 	"log"
+	"os"
 	"strconv"
 
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
@@ -13,11 +14,19 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	WarnLog = log.New(os.Stderr, "[WARNING] ", log.LstdFlags|log.Lmsgprefix)
+	ErrLog  = log.New(os.Stderr, "[ERROR] ", log.LstdFlags|log.Lmsgprefix)
+	Log     = log.New(os.Stdout, "[INFO]", log.LstdFlags|log.Lmsgprefix)
+)
+
 type MembersService interface {
 	CreateMember(member *models.Member) error
 	UpdateMember(member *models.Member) error
 	DeleteMember(member *models.Member) error
 	GetMembers(membersName []string) ([]models.Member, error)
+	PickTimer(ctx context.Context)
+	MemberPicker(ctx context.Context)
 }
 
 type MembersServer struct {
@@ -30,12 +39,16 @@ func New(membersService MembersService) (*MembersServer, error) {
 	validator, err := protovalidate.New()
 
 	if err != nil {
-		log.Fatalf("Error on protovalidate %v", err)
+		ErrLog.Fatalf("Error on protovalidate %v", err)
 
 		return nil, err
 	}
 
 	return &MembersServer{membersService: membersService, validator: validator}, nil
+}
+
+func (s *MembersServer) MembersService() MembersService {
+	return s.membersService
 }
 
 func (s *MembersServer) CreateMember(ctx context.Context, req *pb.Member) (*pb.Empty, error) {

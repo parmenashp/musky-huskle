@@ -32,11 +32,11 @@ type MemberOfDay struct {
 
 type ShuffleBag struct {
 	gorm.Model
-	MemberID uint
+	MemberID uint `gorm:"unique"`
 }
 
 type WaitQueue struct {
 	gorm.Model
-	MemberID uint
+	MemberID uint `gorm:"unique"`
 	Position uint `gorm:"unique"`
 }

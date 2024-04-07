@@ -14,8 +14,6 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 
 	_, err := os.Stat("musky_huskle.db")
 
-	createTables := false
-
 	if errors.Is(err, os.ErrNotExist) {
 		log.Printf("Musky huskle DB not found. Creating new one.")
 		file, err := os.Create("musky_huskle.db")
@@ -24,7 +22,6 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 			log.Fatal("Could not create initial sqlite database", err)
 			return nil, err
 		}
-		createTables = true
 		file.Close()
 	}
 
@@ -36,13 +33,16 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	if createTables {
-		CreateTables(db)
-	}
+	MigrateDb(db)
 
 	return db, nil
 }
 
-func CreateTables(db *gorm.DB) {
-	db.Migrator().CreateTable(&models.Member{})
+func MigrateDb(db *gorm.DB) {
+	db.Migrator().AutoMigrate(
+		&models.Member{},
+		&models.MemberOfDay{},
+		&models.ShuffleBag{},
+		&models.WaitQueue{},
+	)
 }

@@ -8,11 +8,12 @@ import (
 )
 
 type MembersService struct {
-	db *gorm.DB
+	db           *gorm.DB
+	internalChan chan PickEvent
 }
 
 func New(db *gorm.DB) *MembersService {
-	return &MembersService{db: db}
+	return &MembersService{db: db, internalChan: make(chan PickEvent)}
 }
 
 func (s *MembersService) CreateMember(member *models.Member) error {

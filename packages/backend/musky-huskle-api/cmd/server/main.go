@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
 	members_server "github.com/DanielKenichi/musky-huskle-api/internal/member_server"
@@ -13,6 +14,12 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gorm.io/gorm"
+)
+
+var (
+	WarnLog = log.New(os.Stderr, "[WARNING] ", log.LstdFlags|log.Lmsgprefix)
+	ErrLog  = log.New(os.Stderr, "[ERROR] ", log.LstdFlags|log.Lmsgprefix)
+	Log     = log.New(os.Stdout, "[INFO]", log.LstdFlags|log.Lmsgprefix)
 )
 
 var (
@@ -32,15 +39,13 @@ func main() {
 	defer db.Close()
 
 	if err != nil {
-		log.Fatalf("Could not connect to database: %v", err)
-		return
+		ErrLog.Fatalf("Could not connect to database: %v", err)
 	}
 
 	server_listener, err := net.Listen("tcp", fmt.Sprintf(":%d", *server_port))
 
 	if err != nil {
-		log.Fatalf("Failed to start the server: %v", err)
-		return
+		ErrLog.Fatalf("Failed to start the server: %v", err)
 	}
 
 	gRPCServer := grpc.NewServer()
@@ -48,11 +53,10 @@ func main() {
 	membersServer, err := RegisterMemberServer(gRPCServer, gormDb)
 
 	if err != nil {
-		log.Fatalf("Failed to register servers: %v", err)
-		return
+		ErrLog.Fatalf("Failed to register servers: %v", err)
 	}
 
-	log.Printf("Server being started at %v", server_listener.Addr())
+	Log.Printf("Server being started at %v", server_listener.Addr())
 
 	reflection.Register(gRPCServer)
 
@@ -66,8 +70,7 @@ func main() {
 	err = gRPCServer.Serve(server_listener)
 
 	if err != nil {
-		log.Fatalf("Failed to start the server %v", err)
-		return
+		ErrLog.Fatalf("Failed to start the server %v", err)
 	}
 }
 
@@ -76,7 +79,7 @@ func RegisterMemberServer(gRPCServer *grpc.Server, gormDb *gorm.DB) (*members_se
 	membersServer, err := members_server.New(membersService)
 
 	if err != nil {
-		log.Fatal("Failed to register MemberService Server")
+		ErrLog.Fatal("Failed to register MemberService Server")
 		return nil, err
 	}
 

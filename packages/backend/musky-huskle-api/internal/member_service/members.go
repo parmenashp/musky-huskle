@@ -45,7 +45,7 @@ func (s *MembersService) UpdateMember(updatedMember *models.Member) error {
 
 	var member models.Member
 
-	result := s.db.Where("Name = ? ", member.Name).Find(&member)
+	result := s.db.Where("name = ? ", member.Name).Find(&member)
 
 	if result.Error != nil {
 		log.Printf("Failed to retrieve member %s to update", updatedMember.Name)
@@ -70,7 +70,7 @@ func (s *MembersService) DeleteMember(memberToDelete *models.Member) error {
 
 	var member models.Member
 
-	result := s.db.Where("Name = ? ", memberToDelete.Name).Delete(&member)
+	result := s.db.Where("name = ? ", memberToDelete.Name).Delete(&member)
 
 	if result.Error != nil {
 		log.Printf("Error trying to delete member %s", memberToDelete.Name)
@@ -84,7 +84,7 @@ func (s *MembersService) DeleteMember(memberToDelete *models.Member) error {
 func (s *MembersService) GetMembers(membersName []string) ([]models.Member, error) {
 	var members []models.Member
 
-	result := s.db.Where("Name IN ?", membersName).Find(&members)
+	result := s.db.Where("name IN ?", membersName).Find(&members)
 
 	if result.Error != nil {
 		log.Printf("Failed to retrieve members")

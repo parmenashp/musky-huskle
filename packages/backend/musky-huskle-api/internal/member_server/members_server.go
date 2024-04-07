@@ -3,6 +3,7 @@ package members
 import (
 	"context"
 	"log"
+	"os"
 	"strconv"
 
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
@@ -11,6 +12,12 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
+)
+
+var (
+	WarnLog = log.New(os.Stderr, "[WARNING] ", log.LstdFlags|log.Lmsgprefix)
+	ErrLog  = log.New(os.Stderr, "[ERROR] ", log.LstdFlags|log.Lmsgprefix)
+	Log     = log.New(os.Stdout, "[INFO]", log.LstdFlags|log.Lmsgprefix)
 )
 
 type MembersService interface {
@@ -32,7 +39,7 @@ func New(membersService MembersService) (*MembersServer, error) {
 	validator, err := protovalidate.New()
 
 	if err != nil {
-		log.Fatalf("Error on protovalidate %v", err)
+		ErrLog.Fatalf("Error on protovalidate %v", err)
 
 		return nil, err
 	}

@@ -65,7 +65,7 @@ func (s *MembersService) MemberPicker(ctx context.Context) {
 			shuffleBag, err := GetShuffledBag(s.db)
 
 			if err != nil {
-				ErrLog.Print("Error While Picking Member for the day. Manual Pick required")
+				ErrLog.Printf("Error While Picking Member for the day. Manual Pick required: %v", err)
 				<-s.internalChan
 				continue
 			}
@@ -73,7 +73,7 @@ func (s *MembersService) MemberPicker(ctx context.Context) {
 			memberOfDay, err := PickMemberOfDay(s.db, shuffleBag)
 
 			if err != nil {
-				ErrLog.Print("Error While Picking Member for the day. Manual Pick required")
+				ErrLog.Printf("Error While Picking Member for the day. Manual Pick required: %v", err)
 				<-s.internalChan
 				continue
 			}
@@ -81,7 +81,7 @@ func (s *MembersService) MemberPicker(ctx context.Context) {
 			err = SetMemberOfDay(s.db, memberOfDay)
 
 			if err != nil {
-				ErrLog.Print("Error while Picking Member for the day. Manual Pick required")
+				ErrLog.Printf("Error while Picking Member for the day. Manual Pick required: %v", err)
 				<-s.internalChan
 				continue
 			}

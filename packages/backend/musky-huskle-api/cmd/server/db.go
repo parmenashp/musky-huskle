@@ -5,9 +5,29 @@ import (
 	"os"
 
 	"github.com/DanielKenichi/musky-huskle-api/internal/models"
+	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
+
+func ConnectToMySQLDatabase() (*gorm.DB, error) {
+	dsn := "muskyhuskle:root@tcp(musky-huskle-db:3306)/muskyhuskle?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		ErrLog.Fatalf("Error connecting to mysql database: %v", err)
+	}
+
+	err = MigrateDb(db)
+
+	if err != nil {
+		ErrLog.Fatalf("Could not Auto Migrate database: %v", err)
+
+		return nil, err
+	}
+
+	return db, nil
+}
 
 func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 
@@ -24,8 +44,7 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 		file.Close()
 	}
 
-	gormDial := sqlite.Open("musky_huskle.db")
-	db, err := gorm.Open(gormDial, &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("musky_huskle.db"), &gorm.Config{})
 
 	if err != nil {
 		ErrLog.Fatal("Driver could not open sqlite database file")

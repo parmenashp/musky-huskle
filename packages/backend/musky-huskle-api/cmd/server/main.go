@@ -24,6 +24,7 @@ var (
 
 var (
 	server_port = flag.Int("port", 9621, "Server Port")
+	db_type     = flag.String("database_type", "MySQL", "Type of database to use")
 )
 
 func init() {
@@ -31,8 +32,7 @@ func init() {
 }
 
 func main() {
-
-	gormDb, err := ConnectToSQLiteDatabase()
+	gormDb, err := ConnectToDatabase()
 
 	db, _ := gormDb.DB()
 
@@ -72,6 +72,25 @@ func main() {
 	if err != nil {
 		ErrLog.Fatalf("Failed to start the server %v", err)
 	}
+}
+
+func ConnectToDatabase() (*gorm.DB, error) {
+	var gormDb *gorm.DB
+	var err error
+
+	if *db_type == "MySQL" {
+		gormDb, err = ConnectToMySQLDatabase()
+	} else if *db_type == "SQLite" {
+		gormDb, err = ConnectToSQLiteDatabase()
+	} else {
+		ErrLog.Fatal("Unsuported database type")
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return gormDb, nil
 }
 
 func RegisterMemberServer(gRPCServer *grpc.Server, gormDb *gorm.DB) (*members_server.MembersServer, error) {

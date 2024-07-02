@@ -1,15 +1,17 @@
 module github.com/DanielKenichi/musky-huskle-api
 
-go 1.22.1
+go 1.22.4
 
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.33.0-20240221180331-f05a6f4403ce.1
 	github.com/bufbuild/protovalidate-go v0.6.0
 	google.golang.org/grpc v1.62.1
+	gorm.io/driver/mysql v1.5.6
 )
 
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/google/cel-go v0.20.0 // indirect
 	github.com/stoewer/go-strcase v1.3.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect

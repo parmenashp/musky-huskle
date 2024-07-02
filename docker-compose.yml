@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  db:
+    container_name: musky-huskle-db
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./packages/backend/data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: muskyhuskle
+      MYSQL_USER: muskyhuskle
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  backend:
+    container_name: musky-huskle-server
+    build:
+      dockerfile: ./DockerFile.backend
+    ports:
+      - 9621:9621
+    depends_on:
+      - db

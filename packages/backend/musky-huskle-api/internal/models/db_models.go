@@ -8,19 +8,19 @@ import (
 
 type Member struct {
 	gorm.Model
-	GenreIdentity   string
-	Age             uint8
-	FursonaSpecies  string
-	Color           string
-	Occupation      string
-	Sexuality       string
-	Sign            string
-	MemberSince     string
-	AvatarUrl       string
-	Name            string        `gorm:"unique"`
-	SelectedDays    []MemberOfDay `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	ShuffleBagEntry ShuffleBag    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	WaitQueueEntry  WaitQueue     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	GenreIdentity   string        `json:"genreIdentity" gorm:"column:genre_identity"`
+	Age             uint8         `json:"age"`
+	FursonaSpecies  string        `json:"fursonaSpecies" gorm:"column:fursona_species"`
+	Color           string        `json:"color"`
+	Occupation      string        `json:"occupation"`
+	Sexuality       string        `json:"sexuality"`
+	Sign            string        `json:"sign"`
+	MemberSince     string        `json:"memberSince" gorm:"column:member_since"`
+	AvatarUrl       string        `json:"avatarUrl"`
+	Name            string        `json:"name" gorm:"unique"`
+	SelectedDays    []MemberOfDay `json:"selectedDays" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ShuffleBagEntry ShuffleBag    `json:"shuffleBagEntry" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	WaitQueueEntry  WaitQueue     `json:"waitQueueEntry" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type MemberOfDay struct {

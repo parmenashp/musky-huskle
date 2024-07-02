@@ -11,6 +11,7 @@ import (
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
 	members_server "github.com/DanielKenichi/musky-huskle-api/internal/member_server"
 	members_service "github.com/DanielKenichi/musky-huskle-api/internal/member_service"
+	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gorm.io/gorm"
@@ -28,6 +29,12 @@ var (
 )
 
 func init() {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		ErrLog.Fatalf("Failed to load env file %v", err)
+	}
+
 	flag.Parse()
 }
 

@@ -9,8 +9,8 @@ services:
     volumes:
       - ./packages/backend/data:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: muskyhuskle
-      MYSQL_USER: muskyhuskle
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   backend:

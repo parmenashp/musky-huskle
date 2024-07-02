@@ -1,0 +1,10 @@
+FROM golang:1.22.4
+
+WORKDIR /go/src/muskyhuskle
+
+COPY ./packages/backend/musky-huskle-api/. .
+
+RUN go build -o /go/bin/muskyhuskle ./cmd/server/*.go
+
+CMD ["/go/bin/muskyhuskle"]
+EXPOSE 9621

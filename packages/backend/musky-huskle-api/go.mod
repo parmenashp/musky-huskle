@@ -5,6 +5,7 @@ go 1.22.4
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.33.0-20240221180331-f05a6f4403ce.1
 	github.com/bufbuild/protovalidate-go v0.6.0
+	github.com/joho/godotenv v1.5.1
 	google.golang.org/grpc v1.62.1
 	gorm.io/driver/mysql v1.5.6
 )

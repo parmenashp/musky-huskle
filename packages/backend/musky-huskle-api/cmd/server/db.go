@@ -2,16 +2,26 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"os"
 
 	"github.com/DanielKenichi/musky-huskle-api/internal/models"
+	"github.com/joho/godotenv"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 func ConnectToMySQLDatabase() (*gorm.DB, error) {
-	dsn := "muskyhuskle:root@tcp(musky-huskle-db:3306)/muskyhuskle?charset=utf8mb4&parseTime=True&loc=Local"
+
+	err := godotenv.Load(".env")
+	if err != nil {
+		ErrLog.Fatalf("Failed to load env file %v", err)
+	}
+
+	dbPass := os.Getenv("MYSQL_PASSWORD")
+	dsn := fmt.Sprintf("muskyhuskle:%s@tcp(musky-huskle-db:3306)/muskyhuskle?charset=utf8mb4&parseTime=True&loc=Local", dbPass)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {

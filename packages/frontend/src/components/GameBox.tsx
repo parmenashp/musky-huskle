@@ -24,15 +24,14 @@ const Box = styled.div<BoxStyleProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 0.313rem solid #000000;
   border-radius: 0.313rem;
 
   &.right {
-    background-color: #40ac2e;
+    background-color: var(--right);
   }
 
   &.wrong {
-    background-color: #bb2121;
+    background-color: var(--wrong);
     &.down {
       background-image: url(${RedArrowSvg});
       background-position: center;
@@ -50,7 +49,7 @@ const Box = styled.div<BoxStyleProps>`
   }
 
   &.partial {
-    background-color: #c7b248;
+    background-color: var(--partial);
   }
 
   &.avatar {

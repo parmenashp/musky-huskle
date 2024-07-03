@@ -8,18 +8,20 @@ import { useState } from "react";
 import GameTable from "./components/GameTable";
 import { GameMemberData } from "./types";
 import GameResult from "./components/GameResult";
+import MuskyBarSvg from "./assets/musky-bar.svg";
+import GameStatistics from "./components/GameStatistics";
 
 const NameInput = styled.input`
-  border: 0.25rem solid #000000;
+  border: 0.25rem solid var(--menu-bg);
   border-radius: 0.25rem;
-  padding: 1.375rem;
-  height: 3.25rem;
-  width: 20rem;
-  background-color: #181818;
+  padding: 0 1.5rem 0 1.5rem;
+  height: 3rem;
+  width: 18.75rem;
+  background-color: var(--menu-bg);
 
   &::placeholder {
     opacity: 1; /* Firefox */
-    color: #6b6b6b;
+    color: var(--placeholder);
     font-size: 1.125rem;
   }
 `;
@@ -61,7 +63,7 @@ function App() {
       avatar: {
         name: "Dônovan Carmona",
         avatarUrl:
-          "https://cdn.discordapp.com/avatars/187366610368069632/86b3d9717d508531d89cdaf8162717b4.png?size=128",
+          "https://cdn.discordapp.com/avatars/187366610368069632/607fdc34563e25fbeb02d05c3b90f906.png?size=2048",
       },
       gender: { value: "Homem", status: "right" },
       age: { value: 24, status: "wrong" },
@@ -88,10 +90,15 @@ function App() {
 
   return (
     <>
-      <div className="flex max-w-4xl justify-center pt-12 gap-7 flex-col text-center items-center">
-        <p className="text-7xl">Musky Huskle</p>
-        <p className="text-3xl">Jogo diário do Musky</p>
-
+      <div className="flex max-w-4xl justify-center pt-12 pb-6 gap-7 flex-col text-center items-center">
+        <div className="">
+          <img src={MuskyBarSvg} alt="Musky Bar" />
+          <div className="mb-3 mt-1">
+            <p className="text-7xl">Musky Huskle</p>
+            <p className="text-3xl">Jogo diário do Musky</p>
+          </div>
+          <img src={MuskyBarSvg} alt="Musky Bar" />
+        </div>
         <div className="flex gap-8">
           <button>
             <img src={GearSvg} alt="Settings" />
@@ -110,9 +117,9 @@ function App() {
           <span>pessoas já descobriram hoje</span>
         </p>
 
-        <div className="flex">
+        <div className="flex gap-3">
           {Array.from({ length: 7 }).map((_, index) => (
-            <img key={index} src={Heart} alt="Heart" />
+            <img key={index} src={Heart} alt="Heart" className="w-10" />
           ))}
         </div>
 
@@ -128,6 +135,7 @@ function App() {
         </div>
         <GameTable tableData={gameData} />
         <GameResult />
+        <GameStatistics />
       </div>
     </>
   );

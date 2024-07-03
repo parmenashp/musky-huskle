@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import copySvg from "../assets/copy.svg";
 
 const RainbowBorder = styled.div`
   border-radius: 0.375rem;
@@ -79,6 +80,7 @@ const AvatarBorder = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 
   mask-image: url(#avatar-mask);
   background: linear-gradient(
@@ -105,10 +107,10 @@ function GameResult() {
     <RainbowBorder>
       <InnerDiv className="relative">
         <div className="flex">
-          <AvatarSVG avatarUrl="https://cdn.discordapp.com/avatars/731662577331077131/effc711f476793c36527d07cb2ce2590.png?size=2048" />
+          <AvatarSVG avatarUrl="https://cdn.discordapp.com/avatars/141007689265315840/a_415f92b26e0199962f1f197b73668db7.png?size=128" />
           <AvatarBorder />
         </div>
-        <div className="text-3xl mb-3">Suporta</div>
+        <div className="text-3xl mb-3">Ichy</div>
         <p className="text-xl">
           <span>Você acertou em: &nbsp;</span>
           <span className="text-accent">2 tentativas</span>
@@ -121,6 +123,10 @@ function GameResult() {
           🟩🟥🟥🟨🟥🟥🔼
           <p>https://muskyhuskle.net</p>
         </div>
+        <button className="flex gap-1 mt-2">
+          <img src={copySvg} alt="Copy" />
+          <span>Copiar</span>
+        </button>
       </InnerDiv>
     </RainbowBorder>
   );

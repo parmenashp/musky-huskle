@@ -21,7 +21,7 @@ type GameTableProps = {
 const Table = styled.div`
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  gap: 0.25rem;
+  gap: 0.5rem;
   justify-items: center;
 `;
 

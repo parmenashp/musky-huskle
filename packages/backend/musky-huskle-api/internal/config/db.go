@@ -1,8 +1,9 @@
-package main
+package config
 
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/DanielKenichi/musky-huskle-api/internal/models"
@@ -10,6 +11,12 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+)
+
+var (
+	WarnLog = log.New(os.Stderr, "[WARNING] ", log.LstdFlags|log.Lmsgprefix)
+	ErrLog  = log.New(os.Stderr, "[ERROR] ", log.LstdFlags|log.Lmsgprefix)
+	Log     = log.New(os.Stdout, "[INFO]", log.LstdFlags|log.Lmsgprefix)
 )
 
 func ConnectToMySQLDatabase() (*gorm.DB, error) {

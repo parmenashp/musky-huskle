@@ -9,6 +9,7 @@ import (
 	"os"
 
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
+	"github.com/DanielKenichi/musky-huskle-api/internal/config"
 	members_server "github.com/DanielKenichi/musky-huskle-api/internal/member_server"
 	members_service "github.com/DanielKenichi/musky-huskle-api/internal/member_service"
 	"github.com/joho/godotenv"
@@ -86,9 +87,9 @@ func ConnectToDatabase() (*gorm.DB, error) {
 	var err error
 
 	if *db_type == "MySQL" {
-		gormDb, err = ConnectToMySQLDatabase()
+		gormDb, err = config.ConnectToMySQLDatabase()
 	} else if *db_type == "SQLite" {
-		gormDb, err = ConnectToSQLiteDatabase()
+		gormDb, err = config.ConnectToSQLiteDatabase()
 	} else {
 		ErrLog.Fatal("Unsuported database type")
 	}

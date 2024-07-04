@@ -7,10 +7,15 @@ managed:
       - buf.build/bufbuild/protovalidate
   
 plugins:
-  - plugin: go
+  - plugin: buf.build/grpc/go
     out: .
     opt: paths=source_relative
-  - plugin: buf.build/grpc/go:v1.3.0
+  - plugin: buf.build/protocolbuffers/go
     out: .
-    opt:
-      - paths=source_relative
+    opt: paths=source_relative
+  - plugin: buf.build/grpc/web
+    out: ../../frontend/gen
+    # opt: mode=grpcweb
+  - plugin: buf.build/protocolbuffers/js
+    out: ../../frontend/gen
+  

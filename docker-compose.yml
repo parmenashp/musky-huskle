@@ -21,3 +21,10 @@ services:
       - 9621:9621
     depends_on:
       - db
+  proxy:
+    container_name: musky-huskle-proxy
+    image: envoyproxy/envoy:v1.30-latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml

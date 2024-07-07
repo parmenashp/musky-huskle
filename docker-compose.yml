@@ -28,3 +28,9 @@ services:
       - "8080:8080"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
+  frontend:
+    container_name: musky-huskle-interface
+    build:
+      dockerfile: ./DockerFile.frontend
+    ports:
+      - 5173:5173

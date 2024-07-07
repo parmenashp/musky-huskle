@@ -1,0 +1,11 @@
+FROM node:18-alpine AS development
+
+WORKDIR /front/src/muskyhuskle
+
+COPY ./packages/frontend/package.json /front/src/muskyhuskle/
+
+RUN yarn install
+
+COPY ./packages/frontend/. . 
+
+CMD [ "yarn", "dev", "--host" ]

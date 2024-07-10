@@ -1,24 +1,34 @@
-package members
+package member
 
 import (
 	"log"
 
-	"github.com/DanielKenichi/musky-huskle-api/internal/models"
+	internal "github.com/DanielKenichi/musky-huskle-api/pkg"
+	"github.com/DanielKenichi/musky-huskle-api/pkg/models"
 	"gorm.io/gorm"
 )
 
 type MembersService struct {
-	db           *gorm.DB
-	internalChan chan PickEvent
+	Db           *gorm.DB
+	InternalChan chan PickEvent
+	Time         internal.Time
 }
 
 func New(db *gorm.DB) *MembersService {
-	return &MembersService{db: db, internalChan: make(chan PickEvent)}
+	return &MembersService{
+		Db:           db,
+		InternalChan: make(chan PickEvent),
+		Time:         &Time{},
+	}
 }
 
+/*
+When a member is created for the game, it must be put into the shuffle bag
+A member must always be either in the shuffle bag or into the wait queue exclusively.
+*/
 func (s *MembersService) CreateMember(member *models.Member) error {
 
-	result := s.db.Create(&member)
+	result := s.Db.Create(&member)
 
 	if result.Error != nil {
 		log.Printf("Failed to create member")
@@ -30,7 +40,7 @@ func (s *MembersService) CreateMember(member *models.Member) error {
 		MemberID: member.ID,
 	}
 
-	result = s.db.Create(&shuffleBagEntry)
+	result = s.Db.Create(&shuffleBagEntry)
 
 	if result.Error != nil {
 		log.Printf("Failed inserting new member on shuffle bag")
@@ -45,7 +55,7 @@ func (s *MembersService) UpdateMember(updatedMember *models.Member) error {
 
 	var member models.Member
 
-	result := s.db.Where("name = ? ", member.Name).Find(&member)
+	result := s.Db.Where("name = ? ", updatedMember.Name).Find(&member)
 
 	if result.Error != nil {
 		log.Printf("Failed to retrieve member %s to update", updatedMember.Name)
@@ -54,8 +64,9 @@ func (s *MembersService) UpdateMember(updatedMember *models.Member) error {
 	}
 
 	updatedMember.ID = member.ID
+	updatedMember.CreatedAt = member.CreatedAt
 
-	result = s.db.Save(&updatedMember)
+	result = s.Db.Save(&updatedMember)
 
 	if result.Error != nil {
 		log.Printf("Failed updating member %s", updatedMember.Name)
@@ -66,11 +77,15 @@ func (s *MembersService) UpdateMember(updatedMember *models.Member) error {
 	return nil
 }
 
+/*
+When a memebr is deleted, its shuffle bag or wait queue entry should be
+deleted in cascade
+*/
 func (s *MembersService) DeleteMember(memberToDelete *models.Member) error {
 
 	var member models.Member
 
-	result := s.db.Where("name = ? ", memberToDelete.Name).Delete(&member)
+	result := s.Db.Where("name = ? ", memberToDelete.Name).Delete(&member)
 
 	if result.Error != nil {
 		log.Printf("Error trying to delete member %s", memberToDelete.Name)
@@ -84,7 +99,7 @@ func (s *MembersService) DeleteMember(memberToDelete *models.Member) error {
 func (s *MembersService) GetMembers(membersName []string) ([]models.Member, error) {
 	var members []models.Member
 
-	result := s.db.Where("name IN ?", membersName).Find(&members)
+	result := s.Db.Where("name IN ?", membersName).Find(&members)
 
 	if result.Error != nil {
 		log.Printf("Failed to retrieve members")

@@ -1,0 +1,6 @@
+with-expecter: true
+packages:
+    github.com/DanielKenichi/musky-huskle-api/pkg:
+        config:
+            all: true
+            recursive: true

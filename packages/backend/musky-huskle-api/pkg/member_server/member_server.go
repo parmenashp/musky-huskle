@@ -1,4 +1,4 @@
-package members
+package member
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
-	"github.com/DanielKenichi/musky-huskle-api/internal/models"
+	"github.com/DanielKenichi/musky-huskle-api/pkg/models"
 	"github.com/bufbuild/protovalidate-go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

@@ -1,15 +1,22 @@
-package main
+package config
 
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 
-	"github.com/DanielKenichi/musky-huskle-api/internal/models"
+	"github.com/DanielKenichi/musky-huskle-api/pkg/models"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+)
+
+var (
+	WarnLog = log.New(os.Stderr, "[WARNING] ", log.LstdFlags|log.Lmsgprefix)
+	ErrLog  = log.New(os.Stderr, "[ERROR] ", log.LstdFlags|log.Lmsgprefix)
+	Log     = log.New(os.Stdout, "[INFO]", log.LstdFlags|log.Lmsgprefix)
 )
 
 func ConnectToMySQLDatabase() (*gorm.DB, error) {
@@ -17,10 +24,12 @@ func ConnectToMySQLDatabase() (*gorm.DB, error) {
 	dbUser := os.Getenv("MYSQL_USER")
 	dbName := os.Getenv("MYSQL_DATABASE")
 	dbPort := os.Getenv("MYSQL_PORT")
+	dbHost := os.Getenv("MYSQL_HOST")
 
-	dsn := fmt.Sprintf("%s:%s@tcp(musky-huskle-db:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		dbUser,
 		dbPass,
+		dbHost,
 		dbPort,
 		dbName,
 	)
@@ -42,6 +51,7 @@ func ConnectToMySQLDatabase() (*gorm.DB, error) {
 	return db, nil
 }
 
+// deprecated, might not work with it anymore as MySQL is our main choice
 func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 
 	_, err := os.Stat("musky_huskle.db")
@@ -63,7 +73,6 @@ func ConnectToSQLiteDatabase() (*gorm.DB, error) {
 		ErrLog.Fatal("Driver could not open sqlite database file")
 		return nil, err
 	}
-	//TODO: Implement database auto-repair
 	err = MigrateDb(db)
 
 	if err != nil {

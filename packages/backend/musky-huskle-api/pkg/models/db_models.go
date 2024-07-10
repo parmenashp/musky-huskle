@@ -7,7 +7,9 @@ import (
 )
 
 type Member struct {
-	gorm.Model
+	ID              uint `gorm:"primarykey"`
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
 	GenreIdentity   string        `json:"genreIdentity" gorm:"column:genre_identity"`
 	Age             uint8         `json:"age"`
 	FursonaSpecies  string        `json:"fursonaSpecies" gorm:"column:fursona_species"`
@@ -27,16 +29,20 @@ type MemberOfDay struct {
 	gorm.Model
 	MemberID   uint
 	MemberName string
-	Date       time.Time `gorm:"default:(DATE('now'))"`
+	Date       time.Time `gorm:"default:(CURRENT_DATE)"`
 }
 
 type ShuffleBag struct {
-	gorm.Model
-	MemberID uint `gorm:"unique"`
+	ID        uint `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	MemberID  uint `gorm:"unique"`
 }
 
 type WaitQueue struct {
-	gorm.Model
-	MemberID uint `gorm:"unique"`
-	Position uint `gorm:"unique"`
+	ID        uint `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	MemberID  uint `gorm:"unique"`
+	Position  uint `gorm:"unique"`
 }

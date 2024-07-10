@@ -9,15 +9,16 @@ import (
 	"os"
 
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
-	"github.com/DanielKenichi/musky-huskle-api/internal/config"
-	members_server "github.com/DanielKenichi/musky-huskle-api/internal/member_server"
-	members_service "github.com/DanielKenichi/musky-huskle-api/internal/member_service"
+	"github.com/DanielKenichi/musky-huskle-api/pkg/config"
+	members_server "github.com/DanielKenichi/musky-huskle-api/pkg/member_server"
+	members_service "github.com/DanielKenichi/musky-huskle-api/pkg/member_service"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gorm.io/gorm"
 )
 
+// TODO: use logger instead of these log vars
 var (
 	WarnLog = log.New(os.Stderr, "[WARNING] ", log.LstdFlags|log.Lmsgprefix)
 	ErrLog  = log.New(os.Stderr, "[ERROR] ", log.LstdFlags|log.Lmsgprefix)

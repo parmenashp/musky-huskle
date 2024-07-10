@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/DanielKenichi/musky-huskle-api/pkg/models"
 
@@ -34,7 +35,19 @@ func ConnectToMySQLDatabase() (*gorm.DB, error) {
 		dbName,
 	)
 
+	attempts := 1
+
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	for err != nil && attempts < 10 {
+		WarnLog.Printf("Attempt of connecting to database %v", attempts)
+
+		time.Sleep(time.Second)
+
+		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+		attempts++
+	}
 
 	if err != nil {
 		ErrLog.Fatalf("Error connecting to mysql database: %v", err)

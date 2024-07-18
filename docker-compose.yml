@@ -4,8 +4,6 @@ services:
     container_name: musky-huskle-db
     image: mysql:latest
     restart: always
-    ports:
-      - 3306:3306
     volumes:
       - ./packages/backend/data:/var/lib/mysql
     environment:
@@ -17,20 +15,18 @@ services:
     container_name: musky-huskle-server
     build:
       dockerfile: ./DockerFile.backend
-    ports:
-      - 9621:9621
     depends_on:
       - db
   proxy:
     container_name: musky-huskle-proxy
     image: envoyproxy/envoy:v1.30-latest
     ports:
-      - 8080:8080
+      - 8080:8080 #since our frontend is still mocked, we expose the proxy port to make gRPC requests to the server
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
     environment:
       - loglevel=debug
-  frontend:
+  frontend: #still mocked, backend is not accessible by it
     container_name: musky-huskle-interface
     build:
       dockerfile: ./DockerFile.frontend

@@ -7,4 +7,3 @@ COPY ./packages/backend/musky-huskle-api/. .
 RUN go build -o /go/bin/muskyhuskle ./cmd/server/*.go
 
 CMD ["/go/bin/muskyhuskle"]
-EXPOSE 9621

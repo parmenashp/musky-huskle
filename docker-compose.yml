@@ -17,6 +17,13 @@ services:
       dockerfile: ./DockerFile.backend
     depends_on:
       - db
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
   proxy:
     container_name: musky-huskle-proxy
     image: envoyproxy/envoy:v1.30-latest

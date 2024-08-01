@@ -34,7 +34,7 @@ func init() {
 	err := godotenv.Load(".env")
 
 	if err != nil {
-		ErrLog.Fatalf("Failed to load env file %v", err)
+		WarnLog.Printf("Failed to load env file %v", err)
 	}
 
 	flag.Parse()

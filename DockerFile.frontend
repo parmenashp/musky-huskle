@@ -8,4 +8,4 @@ RUN yarn install
 
 COPY ./packages/frontend/. . 
 
-CMD [ "yarn", "dev", "--host" ]
+CMD [ "yarn", "dev" ]

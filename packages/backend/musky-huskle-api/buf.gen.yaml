@@ -15,7 +15,8 @@ plugins:
     opt: paths=source_relative
   - plugin: buf.build/grpc/web
     out: ../../frontend/gen
-    # opt: mode=grpcweb
-  - plugin: buf.build/protocolbuffers/js
+    opt: 
+      - mode=grpcweb
+      - import_style=typescript
+  - plugin: buf.build/connectrpc/es
     out: ../../frontend/gen
-  

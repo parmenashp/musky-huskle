@@ -616,7 +616,7 @@ func (t *SuiteTest) TestUpdateMember() {
 		Occupation:     "IT",
 		Sexuality:      "bissexual",
 		Sign:           "Aries",
-		MemberSince:    "2020",
+		MemberSince:    2020,
 		AvatarUrl:      "http://uwu.com",
 	}
 
@@ -631,7 +631,7 @@ func (t *SuiteTest) TestUpdateMember() {
 		Occupation:     "Art",
 		Sexuality:      "pansexual",
 		Sign:           "Scorpion",
-		MemberSince:    "2024",
+		MemberSince:    2024,
 		AvatarUrl:      "http://owo.com",
 	}
 

@@ -28,7 +28,7 @@ services:
     container_name: musky-huskle-proxy
     image: envoyproxy/envoy:v1.30-latest
     ports:
-      - 8080:8080 #since our frontend is still mocked, we expose the proxy port to make gRPC requests to the server
+      - 8080:8080 #since our frontend is still incomplete, we expose the proxy port to make some gRPC requests to the server
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
     environment:

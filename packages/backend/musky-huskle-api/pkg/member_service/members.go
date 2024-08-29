@@ -109,3 +109,27 @@ func (s *MembersService) GetMembers(membersName []string) ([]models.Member, erro
 
 	return members, nil
 }
+
+func (s *MembersService) GetMemberOfDay() (*models.Member, error) {
+	formatedDate := s.Time.Now().Local().Format("2006-01-02")
+
+	memberOfDay := models.MemberOfDay{}
+
+	Log.Print("Verifying for member of day")
+
+	result := s.Db.Where("date = ?", formatedDate).First(&memberOfDay)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	member := models.Member{}
+
+	result = s.Db.Where("name = ?", memberOfDay.MemberName).First(&member)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &member, nil
+}

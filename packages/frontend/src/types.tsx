@@ -1,28 +1,28 @@
-export type BoxStatuses =
-  | "right"
-  | "wrong"
-  | "partial"
-  | "wrong up"
-  | "wrong down";
+// export type BoxStatuses =
+//   | "right"
+//   | "wrong"
+//   | "partial"
+//   | "wrong up"
+//   | "wrong down";
 
 export type CategoryValue<T> = {
-  value: T;
-  status: BoxStatuses;
+  value: T | undefined;
+  status: string | undefined;
 };
 
 export type MemberAvatar = {
-  name: string;
-  avatarUrl: string;
+  name: string | undefined;
+  avatarUrl: string | undefined;
 };
 
 export type GameMemberData = {
-  avatar: MemberAvatar;
-  gender: CategoryValue<string>;
-  age: CategoryValue<number>;
-  fursonaSpecies: CategoryValue<string[]>;
-  fursonaColor: CategoryValue<string>;
-  workArea: CategoryValue<string[]>;
-  sexuality: CategoryValue<string>;
-  zodiacSign: CategoryValue<string>;
-  memberSince: CategoryValue<string>;
+  avatar: MemberAvatar | undefined;
+  gender: CategoryValue<string> | undefined;
+  age: CategoryValue<number> | undefined;
+  fursonaSpecies: CategoryValue<string[]> | undefined;
+  fursonaColor: CategoryValue<string> | undefined;
+  workArea: CategoryValue<string[]> | undefined;
+  sexuality: CategoryValue<string> | undefined;
+  zodiacSign: CategoryValue<string> | undefined;
+  memberSince: CategoryValue<string> | undefined;
 };

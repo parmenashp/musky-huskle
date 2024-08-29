@@ -6,10 +6,14 @@ import PolygonButton from "./components/PolygonButton";
 import styled from "styled-components";
 import { useState } from "react";
 import GameTable from "./components/GameTable";
-import { GameMemberData } from "./types";
+import { GameMemberData} from "./types";
 import GameResult from "./components/GameResult";
 import MuskyBarSvg from "./assets/musky-bar.svg";
 import GameStatistics from "./components/GameStatistics";
+import { MembersServiceClient } from "../gen/api/proto/MembersServiceClientPb"
+import { GetMembersRequest } from "../gen/api/proto/members_pb.d"
+
+const server = new MembersServiceClient("http://proxy:8080");
 
 const NameInput = styled.input`
   border: 0.25rem solid var(--menu-bg);
@@ -26,58 +30,64 @@ const NameInput = styled.input`
   }
 `;
 
-function App() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [gameData, setGameData] = useState<GameMemberData[]>([
-    {
+async function App() {
+
+  var testRequest = new GetMembersRequest();
+  var testMembers = new Array<string>();
+
+  testMembers.push("Lucky");
+
+  testRequest.setMembersNameList(testMembers)
+
+  var response = await server.getMembers(testRequest);
+
+  var items = new Array<GameMemberData>;
+
+  response.getMembersList().map((item) => {
+    const memberData:GameMemberData = {
       avatar: {
-        name: "Ichy",
-        avatarUrl:
-          "https://cdn.discordapp.com/avatars/141007689265315840/a_415f92b26e0199962f1f197b73668db7.png?size=128",
+        name: item.getName(),
+        avatarUrl: item.getAvatarUrl()
       },
-      gender: { value: "Homem", status: "right" },
-      age: { value: 29, status: "right" },
-      fursonaSpecies: { value: ["Cachorro"], status: "right" },
-      fursonaColor: { value: "Laranja", status: "right" },
-      workArea: { value: ["Sexo"], status: "right" },
-      sexuality: { value: "Gay", status: "right" },
-      zodiacSign: { value: "Capricórnio", status: "right" },
-      memberSince: { value: "2019", status: "right" },
-    },
-    {
-      avatar: {
-        name: "Mitsuaky",
-        avatarUrl:
-          "https://cdn.discordapp.com/avatars/182575852406571008/70ef4f9d6efdafaf20c20ed90f4e45b3.png?size=128",
+      gender: {
+        value: item.getGenreIdentity()?.getValue(),
+        status: item.getGenreIdentity()?.getStatus(),
       },
-      gender: { value: "Homem", status: "right" },
-      age: { value: 21, status: "wrong" },
-      fursonaSpecies: { value: ["Cachorro"], status: "right" },
-      fursonaColor: { value: "Cinza", status: "wrong" },
-      workArea: { value: ["T.I.", "Sexo"], status: "partial" },
-      sexuality: { value: "Bi", status: "wrong" },
-      zodiacSign: { value: "Touro", status: "wrong" },
-      memberSince: { value: "2019", status: "right" },
-    },
-    {
-      avatar: {
-        name: "Dônovan Carmona",
-        avatarUrl:
-          "https://cdn.discordapp.com/avatars/187366610368069632/607fdc34563e25fbeb02d05c3b90f906.png?size=2048",
+      age: {
+        value: Number(item.getAge()?.getValue()),
+        status: item.getAge()?.getStatus(),
       },
-      gender: { value: "Homem", status: "right" },
-      age: { value: 24, status: "wrong" },
-      fursonaSpecies: { value: ["Gato", "Demônio"], status: "wrong" },
-      fursonaColor: { value: "Cinza", status: "wrong" },
+      fursonaSpecies: {
+        value: [item.getFursonaSpecies()?.getValue() ?? "undefined"],
+        status: item.getFursonaSpecies()?.getStatus()
+      },
+      fursonaColor: {
+        value: item.getColor()?.getValue(),
+        status: item.getColor()?.getStatus(),
+      },
       workArea: {
-        value: ["Design", "Edição"],
-        status: "wrong",
+        value: [item.getOccupation()?.getValue() ?? "undefined"],
+        status: item.getOccupation()?.getStatus(),
       },
-      sexuality: { value: "Gay", status: "right" },
-      zodiacSign: { value: "Leão", status: "wrong" },
-      memberSince: { value: "2020", status: "wrong down" },
-    },
-  ]);
+      sexuality: {
+        value: item.getSexuality()?.getValue(),
+        status: item.getSexuality()?.getStatus()
+      },
+      zodiacSign: {
+        value: item.getSign()?.getValue(),
+        status: item.getSign()?.getStatus()
+      },
+      memberSince: {
+        value: item.getMemberSince()?.getValue(),
+        status: item.getMemberSince()?.getStatus()
+      }
+    }
+
+    items.push(memberData)
+  });
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [gameData, setGameData] = useState<GameMemberData[]>(items);
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);

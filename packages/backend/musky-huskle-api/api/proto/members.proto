@@ -1,9 +1,12 @@
 syntax="proto3";
 
 import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
 package members_service;
 
 service MembersService{
+    rpc Ping(PingRequest) returns (PingResponse);
     rpc GetMembers(GetMembersRequest) returns (MembersResponse);
     rpc CreateMember(Member) returns (Empty);
     rpc UpdateMember(Member) returns (Empty);
@@ -12,13 +15,23 @@ service MembersService{
 
 message Empty {}
 
+message PingRequest {}
+
+message PingResponse{
+    string message = 1;
+}
+
 message GetMembersRequest{
     repeated string members_name = 1;
 }
-
 message CategoryValue{
     string value = 1;
-    bool status = 2; 
+    string status = 2 [
+        (buf.validate.field).string.in = "right", 
+        (buf.validate.field).string.in = "wrong", 
+        (buf.validate.field).string.in = "partial",
+        (buf.validate.field).string.in = "wrong up",
+        (buf.validate.field).string.in = "wrong down"];
 }
 
 message Member {
@@ -29,9 +42,10 @@ message Member {
     string occupation = 5;
     string sexuality = 6;
     string sign = 7;
-    string member_since = 8;
-    string avatar_url = 9;
-    string name = 10;
+    uint32 member_since = 8;
+    string birth_date = 9;
+    string avatar_url = 10;
+    string name = 11;
 }
 
 message MemberResponse{
@@ -43,8 +57,9 @@ message MemberResponse{
     CategoryValue sexuality = 6;
     CategoryValue sign = 7;
     CategoryValue member_since = 8;
-    string avatar_url = 9;
-    string name = 10;
+    CategoryValue birth_date = 9;
+    string avatar_url = 10;
+    string name = 11;
 }
 
 message MembersResponse{

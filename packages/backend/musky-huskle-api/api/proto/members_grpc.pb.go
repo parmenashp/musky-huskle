@@ -31,7 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MembersServiceClient interface {
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
-	GetMembers(ctx context.Context, in *GetMembersRequest, opts ...grpc.CallOption) (*MembersResponse, error)
+	GetMembers(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*MemberResponse, error)
 	CreateMember(ctx context.Context, in *Member, opts ...grpc.CallOption) (*Empty, error)
 	UpdateMember(ctx context.Context, in *Member, opts ...grpc.CallOption) (*Empty, error)
 	DeleteMember(ctx context.Context, in *Member, opts ...grpc.CallOption) (*Empty, error)
@@ -55,9 +55,9 @@ func (c *membersServiceClient) Ping(ctx context.Context, in *PingRequest, opts .
 	return out, nil
 }
 
-func (c *membersServiceClient) GetMembers(ctx context.Context, in *GetMembersRequest, opts ...grpc.CallOption) (*MembersResponse, error) {
+func (c *membersServiceClient) GetMembers(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*MemberResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MembersResponse)
+	out := new(MemberResponse)
 	err := c.cc.Invoke(ctx, MembersService_GetMembers_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ func (c *membersServiceClient) DeleteMember(ctx context.Context, in *Member, opt
 // for forward compatibility.
 type MembersServiceServer interface {
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
-	GetMembers(context.Context, *GetMembersRequest) (*MembersResponse, error)
+	GetMembers(context.Context, *GetMemberRequest) (*MemberResponse, error)
 	CreateMember(context.Context, *Member) (*Empty, error)
 	UpdateMember(context.Context, *Member) (*Empty, error)
 	DeleteMember(context.Context, *Member) (*Empty, error)
@@ -117,7 +117,7 @@ type UnimplementedMembersServiceServer struct{}
 func (UnimplementedMembersServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedMembersServiceServer) GetMembers(context.Context, *GetMembersRequest) (*MembersResponse, error) {
+func (UnimplementedMembersServiceServer) GetMembers(context.Context, *GetMemberRequest) (*MemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMembers not implemented")
 }
 func (UnimplementedMembersServiceServer) CreateMember(context.Context, *Member) (*Empty, error) {
@@ -169,7 +169,7 @@ func _MembersService_Ping_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _MembersService_GetMembers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetMembersRequest)
+	in := new(GetMemberRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -181,7 +181,7 @@ func _MembersService_GetMembers_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: MembersService_GetMembers_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MembersServiceServer).GetMembers(ctx, req.(*GetMembersRequest))
+		return srv.(MembersServiceServer).GetMembers(ctx, req.(*GetMemberRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -27,7 +27,7 @@ type MembersService interface {
 	CreateMember(member *models.Member) error
 	UpdateMember(member *models.Member) error
 	DeleteMember(member *models.Member) error
-	GetMembers(membersName []string) ([]models.Member, error)
+	GetMember(memberName string) (*models.Member, error)
 	GetMemberOfDay() (*models.Member, error)
 	PickTimer(ctx context.Context)
 	MemberPicker(ctx context.Context)
@@ -116,38 +116,30 @@ func (s *MembersServer) DeleteMember(ctx context.Context, req *pb.Member) (*pb.E
 	return &pb.Empty{}, nil
 }
 
-func (s *MembersServer) GetMembers(ctx context.Context, req *pb.GetMembersRequest) (*pb.MembersResponse, error) {
+func (s *MembersServer) GetMembers(ctx context.Context, req *pb.GetMemberRequest) (*pb.MemberResponse, error) {
 	err := s.validator.Validate(req)
 
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
 
-	members, err := s.membersService.GetMembers(req.MembersName)
+	member, err := s.membersService.GetMember(req.MemberName)
 
 	if err != nil {
 		return nil, DbError(err)
 	}
 
-	var response = &pb.MembersResponse{
-		Members: []*pb.MemberResponse{},
-	}
-	for _, member := range members {
+	memberOfDay, err := s.membersService.GetMemberOfDay()
 
-		memberOfDay, err := s.membersService.GetMemberOfDay()
-
-		if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
-			return nil, DbError(err)
-		} else if errors.Is(gorm.ErrRecordNotFound, err) {
-			memberOfDay = &models.Member{}
-		}
-
-		memberResponse := MapMemberResponse(*memberOfDay, member)
-
-		response.Members = append(response.Members, memberResponse)
+	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
+		return nil, DbError(err)
+	} else if errors.Is(gorm.ErrRecordNotFound, err) {
+		memberOfDay = &models.Member{}
 	}
 
-	return response, nil
+	memberResponse := MapMemberResponse(*memberOfDay, *member)
+
+	return memberResponse, nil
 }
 
 func MapStringCategoryValue(correctValue, value string) *pb.CategoryValue {

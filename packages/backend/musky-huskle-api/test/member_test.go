@@ -585,16 +585,11 @@ func (t *SuiteTest) TestGetMember() {
 		service.CreateMember(&member)
 	}
 
-	memberNames := []string{"member1", "member2"}
-
-	gotMembers, err := service.GetMembers(memberNames)
+	gotMember, err := service.GetMember("member1")
 
 	t.Nil(err)
 
-	for _, gotMember := range gotMembers {
-		t.Contains(memberNames, gotMember.Name)
-	}
-
+	t.Equal("member1", gotMember.Name)
 }
 
 func (t *SuiteTest) TestUpdateMember() {

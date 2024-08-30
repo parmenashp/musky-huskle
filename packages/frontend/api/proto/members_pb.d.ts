@@ -50,23 +50,21 @@ export namespace PingResponse {
   }
 }
 
-export class GetMembersRequest extends jspb.Message {
-  getMembersNameList(): Array<string>;
-  setMembersNameList(value: Array<string>): GetMembersRequest;
-  clearMembersNameList(): GetMembersRequest;
-  addMembersName(value: string, index?: number): GetMembersRequest;
+export class GetMemberRequest extends jspb.Message {
+  getMemberName(): string;
+  setMemberName(value: string): GetMemberRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetMembersRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetMembersRequest): GetMembersRequest.AsObject;
-  static serializeBinaryToWriter(message: GetMembersRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetMembersRequest;
-  static deserializeBinaryFromReader(message: GetMembersRequest, reader: jspb.BinaryReader): GetMembersRequest;
+  toObject(includeInstance?: boolean): GetMemberRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMemberRequest): GetMemberRequest.AsObject;
+  static serializeBinaryToWriter(message: GetMemberRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMemberRequest;
+  static deserializeBinaryFromReader(message: GetMemberRequest, reader: jspb.BinaryReader): GetMemberRequest;
 }
 
-export namespace GetMembersRequest {
+export namespace GetMemberRequest {
   export type AsObject = {
-    membersNameList: Array<string>,
+    memberName: string,
   }
 }
 
@@ -223,26 +221,6 @@ export namespace MemberResponse {
     birthDate?: CategoryValue.AsObject,
     avatarUrl: string,
     name: string,
-  }
-}
-
-export class MembersResponse extends jspb.Message {
-  getMembersList(): Array<MemberResponse>;
-  setMembersList(value: Array<MemberResponse>): MembersResponse;
-  clearMembersList(): MembersResponse;
-  addMembers(value?: MemberResponse, index?: number): MemberResponse;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): MembersResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: MembersResponse): MembersResponse.AsObject;
-  static serializeBinaryToWriter(message: MembersResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): MembersResponse;
-  static deserializeBinaryFromReader(message: MembersResponse, reader: jspb.BinaryReader): MembersResponse;
-}
-
-export namespace MembersResponse {
-  export type AsObject = {
-    membersList: Array<MemberResponse.AsObject>,
   }
 }
 

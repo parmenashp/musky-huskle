@@ -17,7 +17,7 @@
 
 import * as grpcWeb from 'grpc-web';
 
-import * as api_proto_members_pb from './members_pb.d'; // proto import: "api/proto/members.proto"
+import * as api_proto_members_pb from '../../api/proto/members_pb.d'; // proto import: "api/proto/members.proto"
 
 
 export class MembersServiceClient {
@@ -26,9 +26,9 @@ export class MembersServiceClient {
   credentials_: null | { [index: string]: string; };
   options_: null | { [index: string]: any; };
 
-  constructor(hostname: string,
-    credentials?: null | { [index: string]: string; },
-    options?: null | { [index: string]: any; }) {
+  constructor (hostname: string,
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: any; }) {
     if (!options) options = {};
     if (!credentials) credentials = {};
     options['format'] = 'binary';
@@ -58,71 +58,71 @@ export class MembersServiceClient {
     request: api_proto_members_pb.PingRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.PingResponse) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.PingResponse>;
+               response: api_proto_members_pb.PingResponse) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.PingResponse>;
 
   ping(
     request: api_proto_members_pb.PingRequest,
     metadata?: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.PingResponse) => void) {
+               response: api_proto_members_pb.PingResponse) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-        '/members_service.MembersService/Ping',
+          '/members_service.MembersService/Ping',
         request,
         metadata || {},
         this.methodDescriptorPing,
         callback);
     }
     return this.client_.unaryCall(
-      this.hostname_ +
+    this.hostname_ +
       '/members_service.MembersService/Ping',
-      request,
-      metadata || {},
-      this.methodDescriptorPing);
+    request,
+    metadata || {},
+    this.methodDescriptorPing);
   }
 
   methodDescriptorGetMembers = new grpcWeb.MethodDescriptor(
     '/members_service.MembersService/GetMembers',
     grpcWeb.MethodType.UNARY,
-    api_proto_members_pb.GetMembersRequest,
-    api_proto_members_pb.MembersResponse,
-    (request: api_proto_members_pb.GetMembersRequest) => {
+    api_proto_members_pb.GetMemberRequest,
+    api_proto_members_pb.MemberResponse,
+    (request: api_proto_members_pb.GetMemberRequest) => {
       return request.serializeBinary();
     },
-    api_proto_members_pb.MembersResponse.deserializeBinary
+    api_proto_members_pb.MemberResponse.deserializeBinary
   );
 
   getMembers(
-    request: api_proto_members_pb.GetMembersRequest,
-    metadata?: grpcWeb.Metadata | null): Promise<api_proto_members_pb.MembersResponse>;
+    request: api_proto_members_pb.GetMemberRequest,
+    metadata?: grpcWeb.Metadata | null): Promise<api_proto_members_pb.MemberResponse>;
 
   getMembers(
-    request: api_proto_members_pb.GetMembersRequest,
+    request: api_proto_members_pb.GetMemberRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.MembersResponse) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.MembersResponse>;
+               response: api_proto_members_pb.MemberResponse) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.MemberResponse>;
 
   getMembers(
-    request: api_proto_members_pb.GetMembersRequest,
+    request: api_proto_members_pb.GetMemberRequest,
     metadata?: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.MembersResponse) => void) {
+               response: api_proto_members_pb.MemberResponse) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-        '/members_service.MembersService/GetMembers',
+          '/members_service.MembersService/GetMembers',
         request,
         metadata || {},
         this.methodDescriptorGetMembers,
         callback);
     }
     return this.client_.unaryCall(
-      this.hostname_ +
+    this.hostname_ +
       '/members_service.MembersService/GetMembers',
-      request,
-      metadata || {},
-      this.methodDescriptorGetMembers);
+    request,
+    metadata || {},
+    this.methodDescriptorGetMembers);
   }
 
   methodDescriptorCreateMember = new grpcWeb.MethodDescriptor(
@@ -144,28 +144,28 @@ export class MembersServiceClient {
     request: api_proto_members_pb.Member,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.Empty) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.Empty>;
+               response: api_proto_members_pb.Empty) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.Empty>;
 
   createMember(
     request: api_proto_members_pb.Member,
     metadata?: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.Empty) => void) {
+               response: api_proto_members_pb.Empty) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-        '/members_service.MembersService/CreateMember',
+          '/members_service.MembersService/CreateMember',
         request,
         metadata || {},
         this.methodDescriptorCreateMember,
         callback);
     }
     return this.client_.unaryCall(
-      this.hostname_ +
+    this.hostname_ +
       '/members_service.MembersService/CreateMember',
-      request,
-      metadata || {},
-      this.methodDescriptorCreateMember);
+    request,
+    metadata || {},
+    this.methodDescriptorCreateMember);
   }
 
   methodDescriptorUpdateMember = new grpcWeb.MethodDescriptor(
@@ -187,28 +187,28 @@ export class MembersServiceClient {
     request: api_proto_members_pb.Member,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.Empty) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.Empty>;
+               response: api_proto_members_pb.Empty) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.Empty>;
 
   updateMember(
     request: api_proto_members_pb.Member,
     metadata?: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.Empty) => void) {
+               response: api_proto_members_pb.Empty) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-        '/members_service.MembersService/UpdateMember',
+          '/members_service.MembersService/UpdateMember',
         request,
         metadata || {},
         this.methodDescriptorUpdateMember,
         callback);
     }
     return this.client_.unaryCall(
-      this.hostname_ +
+    this.hostname_ +
       '/members_service.MembersService/UpdateMember',
-      request,
-      metadata || {},
-      this.methodDescriptorUpdateMember);
+    request,
+    metadata || {},
+    this.methodDescriptorUpdateMember);
   }
 
   methodDescriptorDeleteMember = new grpcWeb.MethodDescriptor(
@@ -230,28 +230,28 @@ export class MembersServiceClient {
     request: api_proto_members_pb.Member,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.Empty) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.Empty>;
+               response: api_proto_members_pb.Empty) => void): grpcWeb.ClientReadableStream<api_proto_members_pb.Empty>;
 
   deleteMember(
     request: api_proto_members_pb.Member,
     metadata?: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-      response: api_proto_members_pb.Empty) => void) {
+               response: api_proto_members_pb.Empty) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-        '/members_service.MembersService/DeleteMember',
+          '/members_service.MembersService/DeleteMember',
         request,
         metadata || {},
         this.methodDescriptorDeleteMember,
         callback);
     }
     return this.client_.unaryCall(
-      this.hostname_ +
+    this.hostname_ +
       '/members_service.MembersService/DeleteMember',
-      request,
-      metadata || {},
-      this.methodDescriptorDeleteMember);
+    request,
+    metadata || {},
+    this.methodDescriptorDeleteMember);
   }
 
 }

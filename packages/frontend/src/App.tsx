@@ -6,14 +6,12 @@ import PolygonButton from "./components/PolygonButton";
 import styled from "styled-components";
 import { useState } from "react";
 import GameTable from "./components/GameTable";
-import { GameMemberData} from "./types";
 import GameResult from "./components/GameResult";
 import MuskyBarSvg from "./assets/musky-bar.svg";
 import GameStatistics from "./components/GameStatistics";
-import { MembersServiceClient } from "../gen/api/proto/MembersServiceClientPb"
-import { GetMembersRequest } from "../gen/api/proto/members_pb.d"
+import fetchMember from "./api";
+import { GameMemberData } from "./types";
 
-const server = new MembersServiceClient("http://proxy:8080");
 
 const NameInput = styled.input`
   border: 0.25rem solid var(--menu-bg);
@@ -30,72 +28,20 @@ const NameInput = styled.input`
   }
 `;
 
-async function App() {
-
-  var testRequest = new GetMembersRequest();
-  var testMembers = new Array<string>();
-
-  testMembers.push("Lucky");
-
-  testRequest.setMembersNameList(testMembers)
-
-  var response = await server.getMembers(testRequest);
-
-  var items = new Array<GameMemberData>;
-
-  response.getMembersList().map((item) => {
-    const memberData:GameMemberData = {
-      avatar: {
-        name: item.getName(),
-        avatarUrl: item.getAvatarUrl()
-      },
-      gender: {
-        value: item.getGenreIdentity()?.getValue(),
-        status: item.getGenreIdentity()?.getStatus(),
-      },
-      age: {
-        value: Number(item.getAge()?.getValue()),
-        status: item.getAge()?.getStatus(),
-      },
-      fursonaSpecies: {
-        value: [item.getFursonaSpecies()?.getValue() ?? "undefined"],
-        status: item.getFursonaSpecies()?.getStatus()
-      },
-      fursonaColor: {
-        value: item.getColor()?.getValue(),
-        status: item.getColor()?.getStatus(),
-      },
-      workArea: {
-        value: [item.getOccupation()?.getValue() ?? "undefined"],
-        status: item.getOccupation()?.getStatus(),
-      },
-      sexuality: {
-        value: item.getSexuality()?.getValue(),
-        status: item.getSexuality()?.getStatus()
-      },
-      zodiacSign: {
-        value: item.getSign()?.getValue(),
-        status: item.getSign()?.getStatus()
-      },
-      memberSince: {
-        value: item.getMemberSince()?.getValue(),
-        status: item.getMemberSince()?.getStatus()
-      }
-    }
-
-    items.push(memberData)
-  });
-
+function App() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [gameData, setGameData] = useState<GameMemberData[]>(items);
+  const [gameData, setGameData] = useState<GameMemberData[]>([]);
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   const handleSearchSubmit = () => {
-    setSearchTerm("");
-    setGameData((state) => [state[0], ...state]);
+    fetchMember(searchTerm).then((data) => {
+      // append the new data to the existing data
+      setGameData(state => [...data, ...state]);
+    });
+    // setGameData((state) => [state[0], ...state]);
   };
 
   return (

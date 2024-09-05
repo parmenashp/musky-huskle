@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -19,6 +20,11 @@ var (
 	ErrLog  = log.New(os.Stderr, "[ERROR] ", log.LstdFlags|log.Lmsgprefix)
 	Log     = log.New(os.Stdout, "[INFO]", log.LstdFlags|log.Lmsgprefix)
 )
+
+type Data struct {
+	Members     []models.Member     `json:"members"`
+	ShuffleBags []models.ShuffleBag `json:"shuffle_bags"`
+}
 
 func ConnectToMySQLDatabase() (*gorm.DB, error) {
 	dbPass := os.Getenv("MYSQL_PASSWORD")
@@ -107,6 +113,23 @@ func MigrateDb(db *gorm.DB) error {
 
 	if err != nil {
 		return err
+	}
+
+	jsonFile, err := os.ReadFile("data/seed.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	var data Data
+	if err := json.Unmarshal(jsonFile, &data); err != nil {
+		log.Fatalf("Failed to unmarshal JSON data: %s", err)
+	}
+
+	for _, member := range data.Members {
+		db.Create(&member)
+	}
+
+	for _, shuffleBag := range data.ShuffleBags {
+		db.Create(&shuffleBag)
 	}
 
 	return nil

@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	pb "github.com/DanielKenichi/musky-huskle-api/api/proto"
 	"github.com/DanielKenichi/musky-huskle-api/pkg/models"
@@ -175,32 +174,25 @@ func MapNumericCategoryValue(correctValue, value int) *pb.CategoryValue {
 	}
 }
 
-func MapDateCategoryValue(correctValue, value time.Time) *pb.CategoryValue {
+// func MapDateCategoryValue(correctValue, value time.Time) *pb.CategoryValue {
 
-	var status string
+// 	var status string
 
-	if correctValue.Equal(value) {
-		status = models.RIGHT
-	} else if correctValue.After(value) {
-		status = models.WRONG_UP
-	} else {
-		status = models.WRONG_UP
-	}
+// 	if correctValue.Equal(value) {
+// 		status = models.RIGHT
+// 	} else if correctValue.After(value) {
+// 		status = models.WRONG_UP
+// 	} else {
+// 		status = models.WRONG_UP
+// 	}
 
-	return &pb.CategoryValue{
-		Value:  value.Format("2006-01-02"),
-		Status: status,
-	}
-}
+// 	return &pb.CategoryValue{
+// 		Value:  value.Format("2006-01-02"),
+// 		Status: status,
+// 	}
+// }
 
 func MapMember(pbMember *pb.Member) *models.Member {
-
-	birth, err := time.Parse("2006-01-02", pbMember.BirthDate)
-
-	if err != nil {
-		ErrLog.Printf("Error parsing member birth date %v", err)
-	}
-
 	return &models.Member{
 		Name:           pbMember.Name,
 		GenreIdentity:  pbMember.GenreIdentity,
@@ -210,7 +202,7 @@ func MapMember(pbMember *pb.Member) *models.Member {
 		Occupation:     pbMember.Occupation,
 		Sexuality:      pbMember.Sexuality,
 		Sign:           pbMember.Sign,
-		BirthDate:      birth,
+		BirthDate:      pbMember.BirthDate,
 		MemberSince:    int(pbMember.MemberSince),
 		AvatarUrl:      pbMember.AvatarUrl,
 	}
@@ -226,9 +218,9 @@ func MapMemberResponse(memberOfDay models.Member, member models.Member) *pb.Memb
 		Sexuality:      MapStringCategoryValue(memberOfDay.Sexuality, member.Sexuality),
 		Sign:           MapStringCategoryValue(memberOfDay.Sign, member.Sign),
 		MemberSince:    MapNumericCategoryValue(memberOfDay.MemberSince, member.MemberSince),
-		BirthDate:      MapDateCategoryValue(memberOfDay.BirthDate, member.BirthDate),
-		AvatarUrl:      member.AvatarUrl,
-		Name:           member.Name,
+		// BirthDate:      MapDateCategoryValue(memberOfDay.BirthDate, member.BirthDate),
+		AvatarUrl: member.AvatarUrl,
+		Name:      member.Name,
 	}
 }
 

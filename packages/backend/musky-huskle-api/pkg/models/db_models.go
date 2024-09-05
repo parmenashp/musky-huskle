@@ -16,23 +16,23 @@ const (
 
 // TODO: fix multivalued fields such as "fursonaSpecied"
 type Member struct {
-	ID              uint `gorm:"primarykey"`
+	ID              uint `json:"id" gorm:"primarykey"`
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
-	BirthDate       time.Time     `json:"birthDate" gorm:"column:birth_date"`
-	GenreIdentity   string        `json:"genreIdentity" gorm:"column:genre_identity"`
+	BirthDate       string        `json:"birth_date" gorm:"column:birth_date"`
+	GenreIdentity   string        `json:"genre_identity" gorm:"column:genre_identity"`
 	Age             uint8         `json:"age"`
-	FursonaSpecies  string        `json:"fursonaSpecies" gorm:"column:fursona_species"`
+	FursonaSpecies  string        `json:"fursona_species" gorm:"column:fursona_species"`
 	Color           string        `json:"color"`
 	Occupation      string        `json:"occupation"`
 	Sexuality       string        `json:"sexuality"`
 	Sign            string        `json:"sign"`
-	MemberSince     int           `json:"memberSince" gorm:"column:member_since"`
-	AvatarUrl       string        `json:"avatarUrl"`
+	MemberSince     int           `json:"member_since" gorm:"column:member_since"`
+	AvatarUrl       string        `json:"avatar_url"`
 	Name            string        `json:"name" gorm:"unique"`
-	SelectedDays    []MemberOfDay `json:"selectedDays" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	ShuffleBagEntry ShuffleBag    `json:"shuffleBagEntry" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	WaitQueueEntry  WaitQueue     `json:"waitQueueEntry" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	SelectedDays    []MemberOfDay `json:"selected_days" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ShuffleBagEntry ShuffleBag    `json:"shuffle_bag_entry" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	WaitQueueEntry  WaitQueue     `json:"wait_queue_entry" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type MemberOfDay struct {
@@ -43,10 +43,10 @@ type MemberOfDay struct {
 }
 
 type ShuffleBag struct {
-	ID        uint `gorm:"primarykey"`
+	ID        uint `json:"id" gorm:"primarykey"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	MemberID  uint `gorm:"unique"`
+	MemberID  uint `json:"member_id" gorm:"unique"`
 }
 
 type WaitQueue struct {

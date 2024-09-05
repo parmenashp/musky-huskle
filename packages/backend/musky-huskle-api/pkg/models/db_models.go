@@ -6,10 +6,20 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	RIGHT      = "right"
+	WRONG      = "wrong"
+	PARTIAL    = "partial"
+	WRONG_UP   = "wrong up"
+	WRONG_DOWN = "wrong down"
+)
+
+// TODO: fix multivalued fields such as "fursonaSpecied"
 type Member struct {
 	ID              uint `gorm:"primarykey"`
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
+	BirthDate       time.Time     `json:"birthDate" gorm:"column:birth_date"`
 	GenreIdentity   string        `json:"genreIdentity" gorm:"column:genre_identity"`
 	Age             uint8         `json:"age"`
 	FursonaSpecies  string        `json:"fursonaSpecies" gorm:"column:fursona_species"`
@@ -17,7 +27,7 @@ type Member struct {
 	Occupation      string        `json:"occupation"`
 	Sexuality       string        `json:"sexuality"`
 	Sign            string        `json:"sign"`
-	MemberSince     string        `json:"memberSince" gorm:"column:member_since"`
+	MemberSince     int           `json:"memberSince" gorm:"column:member_since"`
 	AvatarUrl       string        `json:"avatarUrl"`
 	Name            string        `json:"name" gorm:"unique"`
 	SelectedDays    []MemberOfDay `json:"selectedDays" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`

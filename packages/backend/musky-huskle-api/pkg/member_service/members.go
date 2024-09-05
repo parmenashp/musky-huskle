@@ -96,10 +96,10 @@ func (s *MembersService) DeleteMember(memberToDelete *models.Member) error {
 	return nil
 }
 
-func (s *MembersService) GetMembers(membersName []string) ([]models.Member, error) {
-	var members []models.Member
+func (s *MembersService) GetMember(memberName string) (*models.Member, error) {
+	var member models.Member
 
-	result := s.Db.Where("name IN ?", membersName).Find(&members)
+	result := s.Db.Where("name = ?", memberName).Find(&member)
 
 	if result.Error != nil {
 		log.Printf("Failed to retrieve members")
@@ -107,5 +107,29 @@ func (s *MembersService) GetMembers(membersName []string) ([]models.Member, erro
 		return nil, result.Error
 	}
 
-	return members, nil
+	return &member, nil
+}
+
+func (s *MembersService) GetMemberOfDay() (*models.Member, error) {
+	formatedDate := s.Time.Now().Local().Format("2006-01-02")
+
+	memberOfDay := models.MemberOfDay{}
+
+	Log.Print("Verifying for member of day")
+
+	result := s.Db.Where("date = ?", formatedDate).First(&memberOfDay)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	member := models.Member{}
+
+	result = s.Db.Where("name = ?", memberOfDay.MemberName).First(&member)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &member, nil
 }

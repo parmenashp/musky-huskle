@@ -585,16 +585,11 @@ func (t *SuiteTest) TestGetMember() {
 		service.CreateMember(&member)
 	}
 
-	memberNames := []string{"member1", "member2"}
-
-	gotMembers, err := service.GetMembers(memberNames)
+	gotMember, err := service.GetMember("member1")
 
 	t.Nil(err)
 
-	for _, gotMember := range gotMembers {
-		t.Contains(memberNames, gotMember.Name)
-	}
-
+	t.Equal("member1", gotMember.Name)
 }
 
 func (t *SuiteTest) TestUpdateMember() {
@@ -616,7 +611,7 @@ func (t *SuiteTest) TestUpdateMember() {
 		Occupation:     "IT",
 		Sexuality:      "bissexual",
 		Sign:           "Aries",
-		MemberSince:    "2020",
+		MemberSince:    2020,
 		AvatarUrl:      "http://uwu.com",
 	}
 
@@ -631,7 +626,7 @@ func (t *SuiteTest) TestUpdateMember() {
 		Occupation:     "Art",
 		Sexuality:      "pansexual",
 		Sign:           "Scorpion",
-		MemberSince:    "2024",
+		MemberSince:    2024,
 		AvatarUrl:      "http://owo.com",
 	}
 

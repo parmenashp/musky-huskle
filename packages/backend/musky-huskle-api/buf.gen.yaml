@@ -13,9 +13,3 @@ plugins:
   - plugin: buf.build/protocolbuffers/go
     out: .
     opt: paths=source_relative
-  - plugin: buf.build/grpc/web
-    out: ../../frontend/gen
-    # opt: mode=grpcweb
-  - plugin: buf.build/protocolbuffers/js
-    out: ../../frontend/gen
-  

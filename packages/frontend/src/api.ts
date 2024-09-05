@@ -1,52 +1,60 @@
-import { GetMemberRequest } from "../api/proto/members_pb.d"
-import { MembersServiceClient } from "../api/proto/MembersServiceClientPb"
+import {GrpcWebFetchTransport} from '@protobuf-ts/grpcweb-transport'
+import { MembersServiceClient } from '../api/proto/members.client'
+import { GetMemberRequest } from '../api/proto/members';
 import { GameMemberData } from "./types";
 
-const server = new MembersServiceClient("http://proxy:8080");
+const transport = new GrpcWebFetchTransport({
+    baseUrl: "http://localhost:8080"
+})
+
+const server = new MembersServiceClient(transport);
 
 export default async function fetchMember(name: string): Promise<GameMemberData[]> {
-    var request = new GetMemberRequest();
+    var request = GetMemberRequest.create()
 
-    request = request.setMemberName(name)
+    request.memberName = name
 
-    const response = await server.getMembers(request);
+    console.log("Making gRPC call for getMembers with", name)
 
+    const result = await server.getMembers(request);
+
+    console.log("Call to gRPC server finished.", result)
     return [{
         avatar: {
-            name: response.getName(),
-            avatarUrl: response.getAvatarUrl()
+            name: result.response.name,
+            avatarUrl: result.response.avatarUrl
         },
         gender: {
-            value: response.getGenreIdentity()?.getValue(),
-            status: response.getGenreIdentity()?.getStatus(),
+            value: result.response.genreIdentity?.value,
+            status: result.response.genreIdentity?.status,
         },
         age: {
-            value: Number(response.getAge()?.getValue()),
-            status: response.getAge()?.getStatus(),
+            value: Number(result.response.age?.value),
+            status: result.response.age?.status,
         },
         fursonaSpecies: {
-            value: [response.getFursonaSpecies()?.getValue() ?? "undefined"],
-            status: response.getFursonaSpecies()?.getStatus()
+            value: [result.response.fursonaSpecies?.value ?? "undefined"],
+            status: result.response.fursonaSpecies?.status
         },
         fursonaColor: {
-            value: response.getColor()?.getValue(),
-            status: response.getColor()?.getStatus(),
+            value: result.response.color?.value,
+            status: result.response.color?.status,
         },
         workArea: {
-            value: [response.getOccupation()?.getValue() ?? "undefined"],
-            status: response.getOccupation()?.getStatus(),
+            value: [result.response.occupation?.value ?? "undefined"],
+            status: result.response.occupation?.status,
         },
         sexuality: {
-            value: response.getSexuality()?.getValue(),
-            status: response.getSexuality()?.getStatus()
+            value: result.response.sexuality?.value,
+            status: result.response.sexuality?.status
         },
         zodiacSign: {
-            value: response.getSign()?.getValue(),
-            status: response.getSign()?.getStatus()
+            value: result.response.sign?.value,
+            status: result.response.sign?.status
         },
         memberSince: {
-            value: response.getMemberSince()?.getValue(),
-            status: response.getMemberSince()?.getStatus()
+            value: result.response.memberSince?.value,
+            status: result.response.memberSince?.status
         }
     }]
 }

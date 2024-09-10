@@ -103,6 +103,8 @@ minikube kubectl -- apply -f service.yaml
 
 cd ../frontend
 
+minikube kubectl -- apply -f configmap.yaml
+
 minikube kubectl -- apply -f deployment.yaml 
 
 minikube kubectl -- apply -f service.yaml  

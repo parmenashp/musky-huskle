@@ -28,3 +28,26 @@ spec:
               limits:
                 memory: "2Gi"
                 cpu: "4"
+                
+          - name: musky-huskle-proxy
+            image: envoyproxy/envoy:v1.30-latest
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 8080
+            env:
+              - name: loglevel
+                value: debug
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "500m"
+              limits:
+                memory: "2Gi"
+                cpu: "4"
+            volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+        volumes:
+        - name: envoy-config
+          configMap:
+            name: musky-huskle-frontend-envoy

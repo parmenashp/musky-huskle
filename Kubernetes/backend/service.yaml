@@ -6,8 +6,8 @@ metadata:
     run: musky-huskle-server
 spec:
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 9621
+      targetPort: 9621
       protocol: TCP
   selector:
     app: musky-huskle-server

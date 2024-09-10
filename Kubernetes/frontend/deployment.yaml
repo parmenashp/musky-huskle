@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: musky-huskle-frontend
+  namespace: default
+  labels:
+    app: musky-huskle-frontend
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: musky-huskle-frontend
+    template:
+      metadata:
+          labels:
+            app: musky-huskle-frontend
+      spec:
+        containers:
+          - name: musky-huskle-frontend
+            image: musky-huskle_frontend
+            imagePullPolicy: Never 
+            ports:
+              - containerPort: 5173
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "500m"
+              limits:
+                memory: "2Gi"
+                cpu: "4"

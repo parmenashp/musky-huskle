@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: musky-huskle-server
+  namespace: default
+  labels:
+    app: musky-huskle-server
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: musky-huskle-server
+    template:
+      metadata:
+          labels:
+            app: musky-huskle-server
+      spec:
+        containers:
+          - name: musky-huskle-server
+            image: musky-huskle_backend
+            imagePullPolicy: Never
+            ports:
+              - containerPort: 9621
+            env:
+              - name: MYSQL_DATABASE
+                valueFrom:
+                  configMapKeyRef:
+                    name: musky-huskle-db
+                    key: database
+              - name: MYSQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: musky-huskle-db
+                    key: username
+              - name: MYSQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: musky-huskle-db
+                    key: password
+              - name: MYSQL_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: musky-huskle-db
+                    key: password
+              - name: MYSQL_HOST
+                value: musky-huskle-db
+              - name: MYSQL_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: musky-huskle-db
+                    key: database_port
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "500m"
+              limits:
+                memory: "2Gi"
+                cpu: "4"
+
+          - name: musky-huskle-proxy
+            image: envoyproxy/envoy:v1.30-latest
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 8080
+            env:
+              - name: loglevel
+                value: debug
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "500m"
+              limits:
+                memory: "2Gi"
+                cpu: "4"

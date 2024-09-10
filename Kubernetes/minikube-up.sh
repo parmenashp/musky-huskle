@@ -81,6 +81,8 @@ done
 # Configurando o muskyhuskle
 ################################################
 
+cd db
+
 minikube kubectl -- apply -f secrets.yaml 
 
 minikube kubectl -- create -f pv.yaml 
@@ -92,6 +94,20 @@ minikube kubectl -- apply -f configmap.yaml
 minikube kubectl -- apply -f deployment.yaml 
 
 minikube kubectl -- apply -f service.yaml  
+
+cd ../backend
+
+minikube kubectl -- apply -f deployment.yaml 
+
+minikube kubectl -- apply -f service.yaml  
+
+cd ../frontend
+
+minikube kubectl -- apply -f deployment.yaml 
+
+minikube kubectl -- apply -f service.yaml  
+
+cd ..
 
 ################################################
 # Configurando o Ingress

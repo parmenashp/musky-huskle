@@ -6,8 +6,13 @@ metadata:
     run: musky-huskle-frontend
 spec:
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: 5173
+      protocol: TCP
+    - name: envoy
+      port: 8080
+      targetPort: 8080
       protocol: TCP
   selector:
     app: musky-huskle-frontend

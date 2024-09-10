@@ -4,6 +4,16 @@ metadata:
   name: gateway-ingress
 spec:
   rules:
+    - host: k8s.back
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: musky-huskle-frontend
+              port:
+                number: 8080
     - host: k8s.local
       http:
         paths:

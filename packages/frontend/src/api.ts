@@ -4,7 +4,7 @@ import { GetMemberRequest } from '../api/proto/members';
 import { GameMemberData } from "./types";
 
 const transport = new GrpcWebFetchTransport({
-    baseUrl: "http://127.0.0.1:8080"
+    baseUrl: "http://k8s.back"
 })
 
 const server = new MembersServiceClient(transport);

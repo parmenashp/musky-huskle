@@ -1,0 +1,79 @@
+{
+    "members": [
+      {
+        "id": 1,
+        "birth_date": "2002-04-15",
+        "genre_identity": "Male",
+        "age": 22,
+        "fursona_species": "Cat",
+        "color": "White",
+        "occupation": "IT",
+        "sexuality": "Bisexual",
+        "sign": "Aries",
+        "member_since": 2022,
+        "avatar_url": "http://example.com/avatar1.png",
+        "name": "Lucky"
+      },
+      {
+        "id": 2,
+        "birth_date": "1985-05-15",
+        "genre_identity": "Female",
+        "age": 39,
+        "fursona_species": "Fox",
+        "color": "Red",
+        "occupation": "Artist",
+        "sexuality": "Homosexual",
+        "sign": "Taurus",
+        "member_since": 2023,
+        "avatar_url": "http://example.com/avatar2.png",
+        "name": "Jamie"
+      },
+      {
+        "id": 3,
+        "birth_date": "1995-03-11",
+        "genre_identity": "Male",
+        "age": 24,
+        "fursona_species": "Dog",
+        "color": "Yellow",
+        "occupation": "Engineer",
+        "sexuality": "Heterosexual",
+        "sign": "Scorpion",
+        "member_since": 2024,
+        "avatar_url": "http://example.com/avatar2.png",
+        "name": "Blob"
+      },
+      {
+        "id": 4,
+        "birth_date": "1997-06-09",
+        "genre_identity": "Non-Binary",
+        "age": 35,
+        "fursona_species": "Wolf",
+        "color": "Gray",
+        "occupation": "Doctor",
+        "sexuality": "Pansexual",
+        "sign": "Leo",
+        "member_since": 2020,
+        "avatar_url": "http://example.com/avatar2.png",
+        "name": "Blub"
+      }
+    ],
+    "shuffle_bags": [
+      {
+        "id": 1,
+        "member_id": 1
+      },
+      {
+        "id": 2,
+        "member_id": 2
+      },
+      {
+        "id": 3,
+        "member_id": 3
+      },
+      {
+        "id": 4,
+        "member_id": 4
+      }
+    ]
+  }
+  

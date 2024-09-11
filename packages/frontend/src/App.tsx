@@ -3,7 +3,6 @@ import FireSvg from "./assets/fire.svg";
 import Heart from "./assets/heart.svg";
 import QuestionSvg from "./assets/question-mark.svg";
 import PolygonButton from "./components/PolygonButton";
-import styled from "styled-components";
 import { useState } from "react";
 import GameTable from "./components/GameTable";
 import GameResult from "./components/GameResult";
@@ -11,38 +10,44 @@ import MuskyBarSvg from "./assets/musky-bar.svg";
 import GameStatistics from "./components/GameStatistics";
 import fetchMember from "./api";
 import { GameMemberData } from "./types";
-
-
-const NameInput = styled.input`
-  border: 0.25rem solid var(--menu-bg);
-  border-radius: 0.25rem;
-  padding: 0 1.5rem 0 1.5rem;
-  height: 3rem;
-  width: 18.75rem;
-  background-color: var(--menu-bg);
-
-  &::placeholder {
-    opacity: 1; /* Firefox */
-    color: var(--placeholder);
-    font-size: 1.125rem;
-  }
-`;
+import NameInput from "./components/NameInput";
 
 function App() {
+  type OptionType = { value: string; label: string };
+
   const [searchTerm, setSearchTerm] = useState("");
   const [gameData, setGameData] = useState<GameMemberData[]>([]);
+  const [count, setCount] = useState(0);
 
-  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
+  const options = () => 
+    new Promise<OptionType[]>((resolve) => {
+    setTimeout(() => {
+      resolve([
+        { value: "Lucky", label: "Lucky" },
+        { value: "Jamie", label: "Jamie" },
+        { value: "Blob", label: "Blob" },
+        { value: "Blub", label: "Blub" },
+      ]);
+    }, 1000);
+  });
+  
   const handleSearchSubmit = () => {
+    // not empty search
+    if (!searchTerm.trim().length) return;
+    // TODO:
+    // only searchs of valid options
+    // if (!options.find((option) => option.value === searchTerm)) return;
+
     fetchMember(searchTerm).then((data) => {
       // append the new data to the existing data
+      console.log(data);
       setGameData(state => [...data, ...state]);
     });
-    // setGameData((state) => [state[0], ...state]);
   };
+
+  const onSearchChange = (option: OptionType | null) => {
+    setSearchTerm(option?.value || "");
+  }
 
   return (
     <>
@@ -68,7 +73,7 @@ function App() {
         </div>
 
         <p className="text-xl">
-          <span className="text-accent">18</span>
+          <span className="text-accent">{count}</span>
           &nbsp;
           <span>pessoas já descobriram hoje</span>
         </p>
@@ -81,11 +86,9 @@ function App() {
 
         <div className="flex items-center">
           <NameInput
-            id="name"
-            type="text"
-            placeholder="Digite o nome"
             onChange={onSearchChange}
-            value={searchTerm}
+            loadOptions={options}
+            placeholder="Digite o nome"
           />
           <PolygonButton onClick={handleSearchSubmit} />
         </div>

@@ -39,3 +39,6 @@ services:
       dockerfile: ./DockerFile.frontend
     ports:
       - 5173:5173
+    volumes:
+      - ./packages/frontend:/front/src/muskyhuskle/
+      - /front/src/muskyhuskle/node_modules

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: musky-huskle-frontend
+  namespace: default
+  labels:
+    app: musky-huskle-frontend
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: musky-huskle-frontend
+    template:
+      metadata:
+          labels:
+            app: musky-huskle-frontend
+      spec:
+        containers:
+          - name: musky-huskle-frontend
+            image: musky-huskle_frontend
+            imagePullPolicy: Never 
+            ports:
+              - containerPort: 5173
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "500m"
+              limits:
+                memory: "2Gi"
+                cpu: "4"
+                
+          - name: musky-huskle-proxy
+            image: envoyproxy/envoy:v1.30-latest
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 8080
+            env:
+              - name: loglevel
+                value: debug
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "500m"
+              limits:
+                memory: "2Gi"
+                cpu: "4"
+            volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+        volumes:
+        - name: envoy-config
+          configMap:
+            name: musky-huskle-frontend-envoy
